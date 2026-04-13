@@ -1,0 +1,45 @@
+{
+  "name": "react-ai-form",
+  "version": "0.0.0",
+  "private": true,
+  "description": "React library that enhances forms with AI capabilities",
+  "packageManager": "pnpm@10.31.0",
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "typecheck": "turbo run typecheck",
+    "dev": "turbo run dev",
+    "clean": "turbo run clean && rm -rf node_modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/burhanharoon/react-ai-form.git"
+  },
+  "keywords": [
+    "react",
+    "forms",
+    "ai",
+    "zod",
+    "react-hook-form"
+  ],
+  "author": "burhanharoon",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/burhanharoon/react-ai-form/issues"
+  },
+  "homepage": "https://github.com/burhanharoon/react-ai-form#readme",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.11",
+    "tsup": "^8.5.1",
+    "turbo": "^2.9.6",
+    "typescript": "^6.0.2"
+  }
+}

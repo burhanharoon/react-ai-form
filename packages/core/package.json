@@ -1,0 +1,39 @@
+{
+  "name": "@react-ai-form/core",
+  "version": "0.0.1",
+  "description": "🚧 Coming soon — Core utilities for react-ai-form",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "echo \"no tests yet\"",
+    "lint": "echo \"no linter yet\"",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist .turbo"
+  },
+  "peerDependencies": {
+    "zod": "^3.23",
+    "ai": "^4.0"
+  },
+  "devDependencies": {
+    "zod": "^3.23.0",
+    "ai": "^4.0.0"
+  },
+  "license": "MIT"
+}
