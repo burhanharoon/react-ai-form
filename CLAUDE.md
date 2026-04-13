@@ -85,3 +85,5 @@ pnpm typecheck   # Type-check all packages
 pnpm dev         # Watch mode for all packages
 pnpm clean       # Remove dist, .turbo, node_modules
 ```
+
+Never mention claude in any PR
