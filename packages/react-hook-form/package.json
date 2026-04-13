@@ -22,7 +22,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "echo \"no tests yet\"",
+    "test": "vitest run",
     "lint": "echo \"no linter yet\"",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist .turbo"
