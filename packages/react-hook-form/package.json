@@ -1,6 +1,9 @@
 {
   "name": "@react-ai-form/react-hook-form",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "React Hook Form adapter for react-ai-form — connects AI hooks to React Hook Form's setValue/trigger API",
   "repository": {
     "type": "git",

@@ -1,6 +1,9 @@
 {
   "name": "@react-ai-form/react",
   "version": "0.1.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "React hooks and components for AI-powered forms — suggestions, form fill, ghost text, accessible UI",
   "repository": {
     "type": "git",
