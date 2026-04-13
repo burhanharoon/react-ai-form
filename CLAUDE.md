@@ -73,6 +73,27 @@ using Zod schemas as the single source of truth for both validation and structur
 - Do not require a provider/context wrapper for basic usage — hooks should work standalone
 - Do not send sensitive fields to LLMs by default — require explicit opt-in
 
+## TypeScript Strictness
+
+The tsconfig enables `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, and `verbatimModuleSyntax`. This means:
+- Cannot assign `undefined` to optional props — omit the key instead
+- All `Record<string, T>` index access returns `T | undefined` — always guard
+- Must use `import type` / `export type` for type-only imports/exports
+
+## Biome & Vitest Notes
+
+- Always run `pnpm lint:fix` after writing new files — Biome enforces import ordering and line-width formatting
+- Import `{ describe, it, expect }` from `"vitest"` explicitly — globals are runtime-only, not available to TypeScript
+- Avoid `!` non-null assertions — use optional chaining or undefined guards
+
+## Core Package API (for v2+ consumers)
+
+- `schema.ts` — `extractFieldMeta`, `schemaToSystemPrompt`, `filterSchemaByPrivacy`
+- `stream.ts` — `createFieldRouter`, `diffPartialObjects`, `DeepPartial`, `FieldRouter`
+- `privacy.ts` — `redactPII`, `rehydratePII`, `classifyFieldSensitivity`, `sanitizeFormDataForAI`, `getFieldPrivacyConfig`, `isFieldAIEnabled`
+- `cache.ts` — `createAICache`, `createCacheKey`, `AICache`
+- `types.ts` — `AIFieldConfig`, `AIFormConfig`, `AIFieldMeta`, `AIFieldUpdate`, `AIFillResult`, `AIFieldError`, `AIFormError`, `AIProvider`
+
 ## Build & Dev Commands
 
 ```bash
