@@ -1,6 +1,6 @@
 {
   "name": "@react-ai-form/react",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "React hooks and components for AI-powered forms — suggestions, form fill, ghost text, accessible UI",
   "repository": {
     "type": "git",
@@ -11,7 +11,16 @@
   "bugs": {
     "url": "https://github.com/burhanharoon/react-ai-form/issues"
   },
-  "keywords": ["react", "ai", "forms", "hooks", "suggestions", "ghost-text", "accessibility", "streaming"],
+  "keywords": [
+    "react",
+    "ai",
+    "forms",
+    "hooks",
+    "suggestions",
+    "ghost-text",
+    "accessibility",
+    "streaming"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@react-ai-form/core",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Core utilities for AI-powered React forms — schema extraction, privacy filtering, streaming, caching",
   "repository": {
     "type": "git",
@@ -11,7 +11,16 @@
   "bugs": {
     "url": "https://github.com/burhanharoon/react-ai-form/issues"
   },
-  "keywords": ["react", "ai", "forms", "zod", "schema", "streaming", "privacy", "llm"],
+  "keywords": [
+    "react",
+    "ai",
+    "forms",
+    "zod",
+    "schema",
+    "streaming",
+    "privacy",
+    "llm"
+  ],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -28,7 +37,9 @@
       }
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
