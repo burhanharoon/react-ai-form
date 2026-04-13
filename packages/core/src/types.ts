@@ -134,11 +134,7 @@ export interface AIFieldError {
   fieldPath: string;
 
   /** Machine-readable error code indicating the failure category. */
-  code:
-    | "validation_failed"
-    | "generation_failed"
-    | "privacy_blocked"
-    | "timeout";
+  code: "validation_failed" | "generation_failed" | "privacy_blocked" | "timeout";
 
   /** Human-readable description of the error. */
   message: string;
@@ -150,12 +146,7 @@ export interface AIFieldError {
  */
 export interface AIFormError extends Error {
   /** Machine-readable error code indicating the failure category. */
-  code:
-    | "stream_failed"
-    | "provider_error"
-    | "schema_error"
-    | "aborted"
-    | "rate_limited";
+  code: "stream_failed" | "provider_error" | "schema_error" | "aborted" | "rate_limited";
 
   /** Per-field errors that contributed to this form-level error, if any. */
   fieldErrors?: AIFieldError[];
