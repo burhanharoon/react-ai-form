@@ -1,7 +1,17 @@
 {
   "name": "@react-ai-form/react-hook-form",
   "version": "0.0.1",
-  "description": "🚧 Coming soon — React Hook Form adapter for react-ai-form",
+  "description": "React Hook Form adapter for react-ai-form — connects AI hooks to React Hook Form's setValue/trigger API",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/burhanharoon/react-ai-form.git",
+    "directory": "packages/react-hook-form"
+  },
+  "homepage": "https://github.com/burhanharoon/react-ai-form/tree/main/packages/react-hook-form#readme",
+  "bugs": {
+    "url": "https://github.com/burhanharoon/react-ai-form/issues"
+  },
+  "keywords": ["react", "ai", "forms", "react-hook-form", "adapter"],
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
