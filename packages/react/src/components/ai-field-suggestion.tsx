@@ -164,9 +164,11 @@ export const AIFieldSuggestion = forwardRef<HTMLInputElement, AIFieldSuggestionP
         />
 
         {/* Bottom layer: the suggestion mirror */}
+        {/* Mirror copies the input's style prop so custom padding/font/border stay aligned */}
         {hasSuggestion && (
           <span
-            className={`ai-field-suggestion__mirror${suggestionClassName ? ` ${suggestionClassName}` : ""}`}
+            className={`ai-field-suggestion__mirror${inputProps.className ? ` ${inputProps.className}` : ""}${suggestionClassName ? ` ${suggestionClassName}` : ""}`}
+            style={inputProps.style}
             aria-hidden="true"
           >
             <span className="ai-field-suggestion__value">{currentValue}</span>

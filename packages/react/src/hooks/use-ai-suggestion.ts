@@ -59,6 +59,12 @@ export interface UseAISuggestionReturn {
 
   /** Manually trigger a new suggestion fetch. */
   refresh: () => void;
+
+  /**
+   * Blur handler for `triggerMode: 'blur'`.
+   * Attach to the input's `onBlur` to trigger suggestion fetching on blur.
+   */
+  handleBlur: () => void;
 }
 
 // ── Hook ───────────────────────────────────────────────────────────
@@ -162,7 +168,8 @@ export function useAISuggestion(options: UseAISuggestionOptions): UseAISuggestio
         }
       } catch (err: unknown) {
         if (err instanceof Error && err.name === "AbortError") {
-          // Aborted requests are expected — don't set error state
+          // Aborted requests are expected — don't set error state, but clear loading
+          setIsLoading(false);
           return;
         }
         if (!controller.signal.aborted) {
@@ -177,10 +184,16 @@ export function useAISuggestion(options: UseAISuggestionOptions): UseAISuggestio
 
   // Debounced effect for typing mode
   useEffect(() => {
-    if (!enabled || triggerMode !== "typing") return;
+    if (!enabled || triggerMode !== "typing") {
+      abortRef.current?.abort();
+      setIsLoading(false);
+      return () => {};
+    }
     if (value.length < minChars) {
+      abortRef.current?.abort();
       setSuggestion(null);
-      return;
+      setIsLoading(false);
+      return () => {};
     }
 
     // Clear pending timer
@@ -196,6 +209,7 @@ export function useAISuggestion(options: UseAISuggestionOptions): UseAISuggestio
     }, debounceMs);
 
     return () => {
+      abortRef.current?.abort();
       if (timerRef.current !== null) {
         clearTimeout(timerRef.current);
         timerRef.current = null;
@@ -222,6 +236,7 @@ export function useAISuggestion(options: UseAISuggestionOptions): UseAISuggestio
   const dismiss = useCallback(() => {
     setSuggestion(null);
     abortRef.current?.abort();
+    setIsLoading(false);
   }, []);
 
   const refresh = useCallback(() => {
@@ -230,5 +245,11 @@ export function useAISuggestion(options: UseAISuggestionOptions): UseAISuggestio
     void fetchSuggestion(value);
   }, [enabled, value, minChars, fetchSuggestion]);
 
-  return { suggestion, isLoading, error, accept, dismiss, refresh };
+  const handleBlur = useCallback(() => {
+    if (!enabled || triggerMode !== "blur") return;
+    if (value.length < minChars) return;
+    void fetchSuggestion(value);
+  }, [enabled, triggerMode, value, minChars, fetchSuggestion]);
+
+  return { suggestion, isLoading, error, accept, dismiss, refresh, handleBlur };
 }

@@ -6,32 +6,26 @@
 	width: 100%;
 }
 
-/* ── Shared font metrics (both layers must match) ────────────────── */
-
-[data-ai-suggestion] input,
-[data-ai-suggestion] .ai-field-suggestion__mirror {
-	font: inherit;
-	letter-spacing: inherit;
-	padding: inherit;
-	border: inherit;
-	margin: 0;
-	box-sizing: border-box;
-	white-space: pre;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
 /* ── Top layer: the real input (transparent background) ──────────── */
 
 [data-ai-suggestion] input {
 	position: relative;
 	z-index: 1;
 	width: 100%;
+	margin: 0;
+	box-sizing: border-box;
 	background: transparent;
 	caret-color: currentColor;
+	white-space: pre;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 /* ── Bottom layer: the suggestion mirror ─────────────────────────── */
+/* Mirror copies ALL visual metrics from the input via CSS inherit.   */
+/* Because both elements are children of the same wrapper, and the    */
+/* input is the styled element, we explicitly copy its computed        */
+/* properties so the ghost text aligns even with custom input styles. */
 
 [data-ai-suggestion] .ai-field-suggestion__mirror {
 	position: absolute;
@@ -39,6 +33,17 @@
 	z-index: 0;
 	pointer-events: none;
 	user-select: none;
+	/* Copy the same box model + typography the input uses */
+	font: inherit;
+	letter-spacing: inherit;
+	line-height: inherit;
+	padding: inherit;
+	border: inherit;
+	margin: 0;
+	box-sizing: border-box;
+	white-space: pre;
+	overflow: hidden;
+	text-overflow: ellipsis;
 	color: transparent;
 	background: var(--ai-form-suggestion-bg, transparent);
 }
@@ -94,7 +99,7 @@
 	padding: 0;
 	margin: -1px;
 	overflow: hidden;
-	clip: rect(0, 0, 0, 0);
+	clip-path: inset(50%);
 	white-space: nowrap;
 	border: 0;
 }

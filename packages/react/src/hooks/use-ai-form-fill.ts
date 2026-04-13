@@ -235,6 +235,8 @@ export function useAIFormFill<T extends ZodObject<ZodRawShape>>(
   const [state, dispatch] = useReducer(formFillReducer, undefined, createInitialState);
 
   const abortControllerRef = useRef<AbortController | null>(null);
+  const userModifiedFieldsRef = useRef(state.userModifiedFields);
+  userModifiedFieldsRef.current = state.userModifiedFields;
   const onFieldUpdateRef = useRef(onFieldUpdate);
   onFieldUpdateRef.current = onFieldUpdate;
   const onCompleteRef = useRef(onComplete);
@@ -306,7 +308,7 @@ export function useAIFormFill<T extends ZodObject<ZodRawShape>>(
 
           for (const update of updates) {
             // Skip user-modified fields
-            if (state.userModifiedFields.has(update.fieldPath)) {
+            if (userModifiedFieldsRef.current.has(update.fieldPath)) {
               continue;
             }
 
@@ -392,7 +394,7 @@ export function useAIFormFill<T extends ZodObject<ZodRawShape>>(
         };
       }
     },
-    [resolved.model, resolved.config, schema, leafFieldPaths, state.userModifiedFields],
+    [resolved.model, resolved.config, schema, leafFieldPaths],
   );
 
   const fillFromData = useCallback(

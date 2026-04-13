@@ -355,6 +355,54 @@ describe("useAISuggestion", () => {
     expect(result.current.suggestion).toBe("suggestion from provider");
   });
 
+  it("aborts in-flight request when value changes (not just timer)", async () => {
+    // First call: returns a pending promise we control
+    let resolveFirst: ((v: Awaited<ReturnType<typeof generateText>>) => void) | undefined;
+    generateText.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          resolveFirst = resolve;
+        }),
+    );
+    // Second call: resolves immediately
+    mockGenerateTextResult("second result");
+
+    const model = createMockModel();
+    const { result, rerender } = renderSuggestionHook({
+      value: "",
+      model,
+    });
+
+    // Trigger first request
+    rerender({ fieldName: "company", value: "Acme Corp", model });
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+    });
+
+    // First generateText is now in-flight (pending)
+    expect(generateText).toHaveBeenCalledTimes(1);
+    expect(result.current.isLoading).toBe(true);
+
+    // Change value — should abort first request and start new debounce
+    rerender({ fieldName: "company", value: "Acme Corporation", model });
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+      await vi.runAllTimersAsync();
+    });
+
+    // Second call made
+    expect(generateText).toHaveBeenCalledTimes(2);
+
+    // Now resolve the first (stale) request — it should be ignored
+    await act(async () => {
+      resolveFirst?.({ text: "stale result" } as Awaited<ReturnType<typeof generateText>>);
+    });
+
+    // The suggestion should be from the second call, not the stale first
+    expect(result.current.suggestion).toBe("second result");
+    expect(result.current.isLoading).toBe(false);
+  });
+
   it("cleanup on unmount aborts in-flight request", async () => {
     mockGenerateTextResult("never arrives");
 
