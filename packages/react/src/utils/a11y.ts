@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // ── useAriaLiveAnnounce ────────────────────────────────────────────
 
@@ -46,36 +46,33 @@ export function useAriaLiveAnnounce(): (
     };
   }, []);
 
-  return useCallback(
-    (message: string, priority: "polite" | "assertive" = "polite") => {
-      const region = regionRef.current;
-      if (!region) return;
+  return useCallback((message: string, priority: "polite" | "assertive" = "polite") => {
+    const region = regionRef.current;
+    if (!region) return;
 
-      region.setAttribute("aria-live", priority);
+    region.setAttribute("aria-live", priority);
 
-      if (priority === "assertive") {
-        // Assertive announcements fire immediately
+    if (priority === "assertive") {
+      // Assertive announcements fire immediately
+      region.textContent = message;
+      lastMessageRef.current = message;
+      return;
+    }
+
+    // Debounce polite announcements (500ms)
+    if (message === lastMessageRef.current) return;
+
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = setTimeout(() => {
+      if (region) {
         region.textContent = message;
         lastMessageRef.current = message;
-        return;
       }
-
-      // Debounce polite announcements (500ms)
-      if (message === lastMessageRef.current) return;
-
-      if (timerRef.current !== null) {
-        clearTimeout(timerRef.current);
-      }
-
-      timerRef.current = setTimeout(() => {
-        if (region) {
-          region.textContent = message;
-          lastMessageRef.current = message;
-        }
-      }, 500);
-    },
-    [],
-  );
+    }, 500);
+  }, []);
 }
 
 // ── useReducedMotion ───────────────────────────────────────────────
@@ -113,23 +110,19 @@ const FOCUSABLE_SELECTOR =
  * Traps keyboard focus within the referenced element when `active` is true.
  * Tab cycles through focusable children; Shift+Tab goes backwards.
  */
-export function useFocusTrap(
-  ref: RefObject<HTMLElement | null>,
-  active: boolean,
-): void {
+export function useFocusTrap(ref: RefObject<HTMLElement | null>, active: boolean): void {
   useEffect(() => {
     if (!active) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== "Tab" || !ref.current) return;
 
-      const focusable = Array.from(
-        ref.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-      );
+      const focusable = Array.from(ref.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
       if (focusable.length === 0) return;
 
-      const first = focusable[0]!;
-      const last = focusable[focusable.length - 1]!;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (!first || !last) return;
 
       if (e.shiftKey) {
         if (document.activeElement === first) {
@@ -158,19 +151,16 @@ export function useFocusTrap(
  */
 export const AI_FORM_ARIA_LABELS = {
   /** Announcement when a suggestion becomes available. */
-  suggestionAvailable: (text: string) =>
-    `Suggestion available: ${text}. Press Tab to accept.`,
+  suggestionAvailable: (text: string) => `Suggestion available: ${text}. Press Tab to accept.`,
 
   /** Announcement while a suggestion is loading. */
   suggestionLoading: "Loading AI suggestion...",
 
   /** Announcement during form fill progress. */
-  formFilling: (progress: string) =>
-    `Filling form with AI. ${progress}`,
+  formFilling: (progress: string) => `Filling form with AI. ${progress}`,
 
   /** Announcement when form fill completes. */
-  formFilled: (count: number) =>
-    `Form filled. ${count} fields updated by AI.`,
+  formFilled: (count: number) => `Form filled. ${count} fields updated by AI.`,
 
   /** Label for an AI-filled field. */
   fieldAIFilled: "This field was filled by AI.",

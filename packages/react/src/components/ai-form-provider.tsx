@@ -1,8 +1,8 @@
-import { createContext, useContext, useMemo } from "react";
-import type { ReactNode } from "react";
-import type { LanguageModelV1 } from "ai";
 import type { AICache, AIFormConfig, AIProvider } from "@react-ai-form/core";
 import { createAICache } from "@react-ai-form/core";
+import type { LanguageModelV1 } from "ai";
+import type { ReactNode } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 // ── Default configuration ──────────────────────────────────────────
 
@@ -60,9 +60,7 @@ export interface AIFormProviderProps {
  * React context for sharing AI form configuration. Undefined by default —
  * hooks throw a descriptive error when used outside of {@link AIFormProvider}.
  */
-export const AIFormContext = createContext<AIFormContextValue | undefined>(
-  undefined,
-);
+export const AIFormContext = createContext<AIFormContextValue | undefined>(undefined);
 
 // ── Provider component ─────────────────────────────────────────────
 
@@ -91,15 +89,9 @@ export function AIFormProvider({
   cacheOptions,
   children,
 }: AIFormProviderProps) {
-  const cache = useMemo(
-    () => createAICache<unknown>(cacheOptions),
-    [cacheOptions?.maxSize, cacheOptions?.ttl],
-  );
+  const cache = useMemo(() => createAICache<unknown>(cacheOptions), [cacheOptions]);
 
-  const mergedConfig = useMemo(
-    () => ({ ...DEFAULT_AI_FORM_CONFIG, ...config }),
-    [config],
-  );
+  const mergedConfig = useMemo(() => ({ ...DEFAULT_AI_FORM_CONFIG, ...config }), [config]);
 
   const value = useMemo<AIFormContextValue>(
     () => ({ model, apiEndpoint, config: mergedConfig, cache }),
@@ -172,18 +164,13 @@ export function useResolvedConfig(
 
   const config = useMemo(() => {
     const base = context?.config ?? DEFAULT_AI_FORM_CONFIG;
-    const {
-      model: _m,
-      apiEndpoint: _a,
-      cacheOptions: _c,
-      ...hookConfig
-    } = hookProps ?? {};
+    const { model: _m, apiEndpoint: _a, cacheOptions: _c, ...hookConfig } = hookProps ?? {};
     return { ...DEFAULT_AI_FORM_CONFIG, ...base, ...hookConfig };
   }, [context?.config, hookProps]);
 
   const fallbackCache = useMemo(
     () => createAICache<unknown>(hookProps?.cacheOptions),
-    [hookProps?.cacheOptions?.maxSize, hookProps?.cacheOptions?.ttl],
+    [hookProps?.cacheOptions],
   );
 
   const cache = context?.cache ?? fallbackCache;

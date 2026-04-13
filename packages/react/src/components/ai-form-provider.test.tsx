@@ -1,7 +1,7 @@
-import { describe, expect, it, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
-import { createElement } from "react";
 import type { LanguageModelV1 } from "ai";
+import { createElement } from "react";
+import { describe, expect, it, vi } from "vitest";
 import {
   AIFormProvider,
   DEFAULT_AI_FORM_CONFIG,
@@ -28,8 +28,7 @@ describe("AIFormProvider", () => {
   it("renders children", () => {
     const model = createMockModel();
     const { result } = renderHook(() => useAIFormContext(), {
-      wrapper: ({ children }) =>
-        createElement(AIFormProvider, { model, children }),
+      wrapper: ({ children }) => createElement(AIFormProvider, { model, children }),
     });
 
     expect(result.current).toBeDefined();
@@ -38,8 +37,7 @@ describe("AIFormProvider", () => {
   it("provides model via context", () => {
     const model = createMockModel("gpt-4o");
     const { result } = renderHook(() => useAIFormContext(), {
-      wrapper: ({ children }) =>
-        createElement(AIFormProvider, { model, children }),
+      wrapper: ({ children }) => createElement(AIFormProvider, { model, children }),
     });
 
     expect(result.current.model).toBe(model);
@@ -49,10 +47,7 @@ describe("AIFormProvider", () => {
     const model = createMockModel();
     const { result } = renderHook(() => useAIFormContext(), {
       wrapper: ({ children }) =>
-        createElement(
-          AIFormProvider,
-          { model, apiEndpoint: "/api/ai-form", children },
-        ),
+        createElement(AIFormProvider, { model, apiEndpoint: "/api/ai-form", children }),
     });
 
     expect(result.current.apiEndpoint).toBe("/api/ai-form");
@@ -62,38 +57,27 @@ describe("AIFormProvider", () => {
     const model = createMockModel();
     const { result } = renderHook(() => useAIFormContext(), {
       wrapper: ({ children }) =>
-        createElement(
-          AIFormProvider,
-          { model, config: { debounceMs: 200 }, children },
-        ),
+        createElement(AIFormProvider, { model, config: { debounceMs: 200 }, children }),
     });
 
     expect(result.current.config.debounceMs).toBe(200);
-    expect(result.current.config.maxRetries).toBe(
-      DEFAULT_AI_FORM_CONFIG.maxRetries,
-    );
-    expect(result.current.config.cacheEnabled).toBe(
-      DEFAULT_AI_FORM_CONFIG.cacheEnabled,
-    );
+    expect(result.current.config.maxRetries).toBe(DEFAULT_AI_FORM_CONFIG.maxRetries);
+    expect(result.current.config.cacheEnabled).toBe(DEFAULT_AI_FORM_CONFIG.cacheEnabled);
   });
 
   it("applies default config values when no config provided", () => {
     const model = createMockModel();
     const { result } = renderHook(() => useAIFormContext(), {
-      wrapper: ({ children }) =>
-        createElement(AIFormProvider, { model, children }),
+      wrapper: ({ children }) => createElement(AIFormProvider, { model, children }),
     });
 
-    expect(result.current.config).toEqual(
-      expect.objectContaining(DEFAULT_AI_FORM_CONFIG),
-    );
+    expect(result.current.config).toEqual(expect.objectContaining(DEFAULT_AI_FORM_CONFIG));
   });
 
   it("creates and provides a cache instance", () => {
     const model = createMockModel();
     const { result } = renderHook(() => useAIFormContext(), {
-      wrapper: ({ children }) =>
-        createElement(AIFormProvider, { model, children }),
+      wrapper: ({ children }) => createElement(AIFormProvider, { model, children }),
     });
 
     const { cache } = result.current;
@@ -119,8 +103,7 @@ describe("useAIFormContext", () => {
   it("returns context values inside provider", () => {
     const model = createMockModel();
     const { result } = renderHook(() => useAIFormContext(), {
-      wrapper: ({ children }) =>
-        createElement(AIFormProvider, { model, children }),
+      wrapper: ({ children }) => createElement(AIFormProvider, { model, children }),
     });
 
     expect(result.current.model).toBe(model);
@@ -151,8 +134,7 @@ describe("useResolvedConfig", () => {
   it("resolves model from context when no hook props", () => {
     const model = createMockModel();
     const { result } = renderHook(() => useResolvedConfig(), {
-      wrapper: ({ children }) =>
-        createElement(AIFormProvider, { model, children }),
+      wrapper: ({ children }) => createElement(AIFormProvider, { model, children }),
     });
 
     expect(result.current.model).toBe(model);
@@ -162,13 +144,9 @@ describe("useResolvedConfig", () => {
     const contextModel = createMockModel("context-model");
     const hookModel = createMockModel("hook-model");
 
-    const { result } = renderHook(
-      () => useResolvedConfig({ model: hookModel }),
-      {
-        wrapper: ({ children }) =>
-          createElement(AIFormProvider, { model: contextModel, children }),
-      },
-    );
+    const { result } = renderHook(() => useResolvedConfig({ model: hookModel }), {
+      wrapper: ({ children }) => createElement(AIFormProvider, { model: contextModel, children }),
+    });
 
     expect(result.current.model).toBe(hookModel);
   });
@@ -176,16 +154,10 @@ describe("useResolvedConfig", () => {
   it("hook-level config overrides context-level config", () => {
     const model = createMockModel();
 
-    const { result } = renderHook(
-      () => useResolvedConfig({ debounceMs: 100 }),
-      {
-        wrapper: ({ children }) =>
-          createElement(
-            AIFormProvider,
-            { model, config: { debounceMs: 500 }, children },
-          ),
-      },
-    );
+    const { result } = renderHook(() => useResolvedConfig({ debounceMs: 100 }), {
+      wrapper: ({ children }) =>
+        createElement(AIFormProvider, { model, config: { debounceMs: 500 }, children }),
+    });
 
     expect(result.current.config.debounceMs).toBe(100);
   });
@@ -193,16 +165,10 @@ describe("useResolvedConfig", () => {
   it("hook-level apiEndpoint overrides context-level", () => {
     const model = createMockModel();
 
-    const { result } = renderHook(
-      () => useResolvedConfig({ apiEndpoint: "/hook-endpoint" }),
-      {
-        wrapper: ({ children }) =>
-          createElement(
-            AIFormProvider,
-            { model, apiEndpoint: "/context-endpoint", children },
-          ),
-      },
-    );
+    const { result } = renderHook(() => useResolvedConfig({ apiEndpoint: "/hook-endpoint" }), {
+      wrapper: ({ children }) =>
+        createElement(AIFormProvider, { model, apiEndpoint: "/context-endpoint", children }),
+    });
 
     expect(result.current.apiEndpoint).toBe("/hook-endpoint");
   });
@@ -211,18 +177,10 @@ describe("useResolvedConfig", () => {
     const model = createMockModel();
     const { result } = renderHook(() => useResolvedConfig({ model }));
 
-    expect(result.current.config.debounceMs).toBe(
-      DEFAULT_AI_FORM_CONFIG.debounceMs,
-    );
-    expect(result.current.config.maxRetries).toBe(
-      DEFAULT_AI_FORM_CONFIG.maxRetries,
-    );
-    expect(result.current.config.cacheEnabled).toBe(
-      DEFAULT_AI_FORM_CONFIG.cacheEnabled,
-    );
-    expect(result.current.config.cacheTTL).toBe(
-      DEFAULT_AI_FORM_CONFIG.cacheTTL,
-    );
+    expect(result.current.config.debounceMs).toBe(DEFAULT_AI_FORM_CONFIG.debounceMs);
+    expect(result.current.config.maxRetries).toBe(DEFAULT_AI_FORM_CONFIG.maxRetries);
+    expect(result.current.config.cacheEnabled).toBe(DEFAULT_AI_FORM_CONFIG.cacheEnabled);
+    expect(result.current.config.cacheTTL).toBe(DEFAULT_AI_FORM_CONFIG.cacheTTL);
   });
 
   it("creates a fallback cache when used without provider", () => {
@@ -242,8 +200,7 @@ describe("useResolvedConfig", () => {
         resolved: useResolvedConfig(),
       }),
       {
-        wrapper: ({ children }) =>
-          createElement(AIFormProvider, { model, children }),
+        wrapper: ({ children }) => createElement(AIFormProvider, { model, children }),
       },
     );
 

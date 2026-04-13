@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
-import { fireEvent, render, screen, act } from "@testing-library/react";
-import { createRef, createElement } from "react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { createElement, createRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AIFormFillerButton } from "./ai-form-filler";
 
@@ -76,7 +76,7 @@ describe("AIFormFillerButton", () => {
       createElement(
         AIFormFillerButton,
         { onFill, asChild: true, isLoading: false },
-        createElement("button", { "data-testid": "custom-btn" }, "Custom Fill"),
+        createElement("button", { type: "button", "data-testid": "custom-btn" }, "Custom Fill"),
       ),
     );
 
@@ -134,13 +134,7 @@ describe("AIFormFillerButton", () => {
   });
 
   it("custom children override default label", () => {
-    render(
-      createElement(
-        AIFormFillerButton,
-        { onFill: vi.fn() },
-        "Generate with AI",
-      ),
-    );
+    render(createElement(AIFormFillerButton, { onFill: vi.fn() }, "Generate with AI"));
 
     expect(screen.getByRole("button")).toHaveTextContent("Generate with AI");
   });

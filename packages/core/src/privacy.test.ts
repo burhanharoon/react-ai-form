@@ -229,8 +229,11 @@ describe("sanitizeFormDataForAI", () => {
 
     expect(sanitized).not.toHaveProperty("ssn");
     expect(redactedFields).toContain("ssn");
+    // biome-ignore lint/complexity/useLiteralKeys: index signature requires bracket notation
     expect((sanitized as Record<string, string>)["email"]).toMatch(/\[EMAIL_/);
+    // biome-ignore lint/complexity/useLiteralKeys: index signature requires bracket notation
     expect((sanitized as Record<string, string>)["name"]).toBe("John");
+    // biome-ignore lint/complexity/useLiteralKeys: index signature requires bracket notation
     expect((sanitized as Record<string, string>)["company"]).toBe("Acme");
     expect(mapping.size).toBeGreaterThan(0);
   });
@@ -263,7 +266,9 @@ describe("sanitizeFormDataForAI", () => {
     );
 
     expect(redactedFields).toContain("profile.ssn");
+    // biome-ignore lint/complexity/useLiteralKeys: index signature requires bracket notation
     const profile = (sanitized as Record<string, Record<string, unknown>>)["profile"];
+    // biome-ignore lint/complexity/useLiteralKeys: index signature requires bracket notation
     expect(profile?.["name"]).toBe("John");
     expect(profile).not.toHaveProperty("ssn");
   });

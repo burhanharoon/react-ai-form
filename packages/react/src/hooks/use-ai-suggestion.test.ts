@@ -1,10 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, renderHook } from "@testing-library/react";
-import { createElement } from "react";
 import type { LanguageModelV1 } from "ai";
+import { createElement } from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AIFormProvider } from "../components/ai-form-provider";
-import { useAISuggestion } from "./use-ai-suggestion";
 import type { UseAISuggestionOptions } from "./use-ai-suggestion";
+import { useAISuggestion } from "./use-ai-suggestion";
 
 // ── Mocks ──────────────────────────────────────────────────────────
 
@@ -27,9 +27,7 @@ function createMockModel(id = "mock-model"): LanguageModelV1 {
 }
 
 function mockGenerateTextResult(text: string) {
-  generateText.mockResolvedValueOnce({ text } as Awaited<
-    ReturnType<typeof generateText>
-  >);
+  generateText.mockResolvedValueOnce({ text } as Awaited<ReturnType<typeof generateText>>);
 }
 
 // ── Helpers ────────────────────────────────────────────────────────
@@ -45,17 +43,12 @@ function renderSuggestionHook(
     ...opts,
   };
 
-  return renderHook(
-    (props: UseAISuggestionOptions) => useAISuggestion(props),
-    {
-      initialProps: defaultOpts,
-    },
-  );
+  return renderHook((props: UseAISuggestionOptions) => useAISuggestion(props), {
+    initialProps: defaultOpts,
+  });
 }
 
-function renderSuggestionHookWithProvider(
-  opts: Partial<UseAISuggestionOptions> = {},
-) {
+function renderSuggestionHookWithProvider(opts: Partial<UseAISuggestionOptions> = {}) {
   const model = createMockModel();
   const defaultOpts: UseAISuggestionOptions = {
     fieldName: "company",
@@ -63,14 +56,10 @@ function renderSuggestionHookWithProvider(
     ...opts,
   };
 
-  return renderHook(
-    (props: UseAISuggestionOptions) => useAISuggestion(props),
-    {
-      initialProps: defaultOpts,
-      wrapper: ({ children }) =>
-        createElement(AIFormProvider, { model, children }),
-    },
-  );
+  return renderHook((props: UseAISuggestionOptions) => useAISuggestion(props), {
+    initialProps: defaultOpts,
+    wrapper: ({ children }) => createElement(AIFormProvider, { model, children }),
+  });
 }
 
 // ── Tests ──────────────────────────────────────────────────────────

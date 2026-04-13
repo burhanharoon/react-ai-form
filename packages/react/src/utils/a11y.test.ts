@@ -1,12 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { createRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  AI_FORM_ARIA_LABELS,
-  useAriaLiveAnnounce,
-  useFocusTrap,
-  useReducedMotion,
-} from "./a11y";
+import { AI_FORM_ARIA_LABELS, useAriaLiveAnnounce, useFocusTrap, useReducedMotion } from "./a11y";
 
 // ── useAriaLiveAnnounce ────────────────────────────────────────────
 
@@ -26,9 +21,7 @@ describe("useAriaLiveAnnounce", () => {
     expect(region).not.toBeNull();
 
     unmount();
-    const regionAfter = document.querySelector(
-      '[aria-live="polite"][role="status"]',
-    );
+    const regionAfter = document.querySelector('[aria-live="polite"][role="status"]');
     expect(regionAfter).toBeNull();
   });
 
@@ -230,9 +223,7 @@ describe("AI_FORM_ARIA_LABELS", () => {
   });
 
   it("has loading label", () => {
-    expect(AI_FORM_ARIA_LABELS.suggestionLoading).toBe(
-      "Loading AI suggestion...",
-    );
+    expect(AI_FORM_ARIA_LABELS.suggestionLoading).toBe("Loading AI suggestion...");
   });
 
   it("generates form filling label", () => {
@@ -242,20 +233,14 @@ describe("AI_FORM_ARIA_LABELS", () => {
   });
 
   it("generates form filled label", () => {
-    expect(AI_FORM_ARIA_LABELS.formFilled(5)).toBe(
-      "Form filled. 5 fields updated by AI.",
-    );
+    expect(AI_FORM_ARIA_LABELS.formFilled(5)).toBe("Form filled. 5 fields updated by AI.");
   });
 
   it("has field AI filled label", () => {
-    expect(AI_FORM_ARIA_LABELS.fieldAIFilled).toBe(
-      "This field was filled by AI.",
-    );
+    expect(AI_FORM_ARIA_LABELS.fieldAIFilled).toBe("This field was filled by AI.");
   });
 
   it("has field review label", () => {
-    expect(AI_FORM_ARIA_LABELS.fieldReview).toBe(
-      "This AI-filled field may need review.",
-    );
+    expect(AI_FORM_ARIA_LABELS.fieldReview).toBe("This AI-filled field may need review.");
   });
 });

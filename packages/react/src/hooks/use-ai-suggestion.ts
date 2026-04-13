@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { generateText } from "ai";
 import type { LanguageModelV1 } from "ai";
+import { generateText } from "ai";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ZodType } from "zod";
 import { useResolvedConfig } from "../components/ai-form-provider";
 
@@ -77,9 +77,7 @@ export interface UseAISuggestionReturn {
  * });
  * ```
  */
-export function useAISuggestion(
-  options: UseAISuggestionOptions,
-): UseAISuggestionReturn {
+export function useAISuggestion(options: UseAISuggestionOptions): UseAISuggestionReturn {
   const {
     fieldName,
     value,
@@ -109,8 +107,7 @@ export function useAISuggestion(
 
   // Build a cache key from field name, value, and context
   const buildCacheKey = useCallback(
-    (val: string) =>
-      `suggestion:${fieldName}:${val}:${JSON.stringify(contextRef.current ?? {})}`,
+    (val: string) => `suggestion:${fieldName}:${val}:${JSON.stringify(contextRef.current ?? {})}`,
     [fieldName],
   );
 
