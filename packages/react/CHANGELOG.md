@@ -1,5 +1,14 @@
 # @react-ai-form/react
 
+## 0.1.1
+
+### Patch Changes
+
+- [`f492f06`](https://github.com/burhanharoon/react-ai-form/commit/f492f064cebf589c471240aef40708d0fa953c5f) Thanks [@burhanharoon](https://github.com/burhanharoon)! - docs: update package READMEs with full API documentation and usage examples
+
+- Updated dependencies [[`f492f06`](https://github.com/burhanharoon/react-ai-form/commit/f492f064cebf589c471240aef40708d0fa953c5f)]:
+  - @react-ai-form/core@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
