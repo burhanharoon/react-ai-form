@@ -159,8 +159,12 @@ export const AIFieldSuggestion = forwardRef<HTMLInputElement, AIFieldSuggestionP
           ref={ref}
           value={value}
           onKeyDown={handleKeyDown}
-          aria-describedby={instructionId}
           {...inputProps}
+          aria-describedby={
+            inputProps["aria-describedby"]
+              ? `${instructionId} ${inputProps["aria-describedby"]}`
+              : instructionId
+          }
         />
 
         {/* Bottom layer: the suggestion mirror */}
