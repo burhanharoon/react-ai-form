@@ -25,7 +25,7 @@ using Zod schemas as the single source of truth for both validation and structur
 ## Code Conventions
 
 - TypeScript strict mode, no `any` types allowed
-- Use `export function` not `export const fn = () =>`
+- Use `export function` not `export const fn = () =>` (exception: `forwardRef` components use `export const`)
 - Named exports only, no default exports (except React components needing React.lazy)
 - All hooks prefixed with `use` (useAIForm, useAISuggestion)
 - All component files use .tsx extension, all other files use .ts
@@ -36,7 +36,7 @@ using Zod schemas as the single source of truth for both validation and structur
 - Prefer `interface` over `type` for object shapes
 - Use `satisfies` over `as` for type assertions
 - All async operations must support AbortController cancellation
-- All useEffect hooks must return cleanup functions
+- All useEffect hooks with subscriptions/timers/listeners must return cleanup functions (ref-only effects don't need cleanup)
 - React Strict Mode compatible (effects may run twice)
 
 ## Testing Conventions
@@ -94,6 +94,26 @@ The tsconfig enables `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, a
 - `cache.ts` — `createAICache`, `createCacheKey`, `AICache`
 - `types.ts` — `AIFieldConfig`, `AIFormConfig`, `AIFieldMeta`, `AIFieldUpdate`, `AIFillResult`, `AIFieldError`, `AIFormError`, `AIProvider`
 
+## React Package API
+
+### Hooks
+- `useAISuggestion(options)` — per-field suggestions with debounce, caching, abort. Returns `suggestion`, `accept()`, `dismiss()`, `refresh()`, `handleBlur()`, `isLoading`, `error`
+- `useAIFormFill(options)` — whole-form streaming fill via `streamObject`. Returns `fillForm(context)`, `fillFromData(data)`, `abort()`, `reset()`, `getFieldStatus(path)`, `markUserModified(path)`, `isFillingForm`, `progress`, `filledFields`, `error`
+- `useAIFormContext()` — returns provider context (throws outside `AIFormProvider`)
+- `useResolvedConfig(hookProps?)` — merges hook props > context > defaults (makes provider optional)
+
+### Components
+- `AIFieldSuggestion` — ghost text overlay input (forwardRef, extends InputHTMLAttributes)
+- `AIFormFillerButton` — "Fill with AI" button with idle/loading/progress/complete states + headless `asChild` mode
+- `AIConfidenceBadge` — field status indicator (ai-filled, user-modified, empty)
+- `AIFormProvider` — optional shared config context
+
+### Accessibility utilities (`utils/a11y.ts`)
+- `useAriaLiveAnnounce()` — screen reader announcements with debounce
+- `useReducedMotion()` — `prefers-reduced-motion` listener
+- `useFocusTrap(ref, active)` — keyboard focus trap
+- `AI_FORM_ARIA_LABELS` — standard ARIA label templates
+
 ## Releasing & Changesets
 
 This project uses [Changesets](https://github.com/changesets/changesets) for versioning and npm publishing.
@@ -120,6 +140,8 @@ Description of what changed (becomes the CHANGELOG entry)
 The release flow:
 1. Changeset file merged to main → GitHub Actions creates a "Version Packages" PR
 2. Merging that PR → publishes all updated packages to npm
+
+Publishing uses **npm trusted publishing (OIDC)** — no npm tokens needed. The release workflow uses Node 24 (npm 11.5.1+ required for OIDC with scoped packages). Trusted publishers are configured per-package on npmjs.com.
 
 ## Build & Dev Commands
 
