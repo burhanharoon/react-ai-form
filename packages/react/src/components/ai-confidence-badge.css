@@ -1,0 +1,45 @@
+[data-ai-confidence] {
+  --ai-form-badge-high: #22c55e;
+  --ai-form-badge-medium: #eab308;
+  --ai-form-badge-low: #f97316;
+  --ai-form-badge-edited: #3b82f6;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 4px;
+  font-family: inherit;
+  line-height: 1;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+[data-ai-confidence-size="sm"] {
+  padding: 2px 6px;
+  font-size: 11px;
+}
+
+[data-ai-confidence-size="md"] {
+  padding: 3px 8px;
+  font-size: 13px;
+}
+
+[data-ai-confidence="ai-filled"][data-ai-confidence-level="high"] {
+  color: var(--ai-form-badge-high);
+  background-color: color-mix(in srgb, var(--ai-form-badge-high) 12%, transparent);
+}
+
+[data-ai-confidence="ai-filled"][data-ai-confidence-level="medium"] {
+  color: var(--ai-form-badge-medium);
+  background-color: color-mix(in srgb, var(--ai-form-badge-medium) 12%, transparent);
+}
+
+[data-ai-confidence="ai-filled"][data-ai-confidence-level="low"] {
+  color: var(--ai-form-badge-low);
+  background-color: color-mix(in srgb, var(--ai-form-badge-low) 12%, transparent);
+}
+
+[data-ai-confidence="user-modified"] {
+  color: var(--ai-form-badge-edited);
+  background-color: color-mix(in srgb, var(--ai-form-badge-edited) 12%, transparent);
+}

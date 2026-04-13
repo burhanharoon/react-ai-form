@@ -94,6 +94,33 @@ The tsconfig enables `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, a
 - `cache.ts` — `createAICache`, `createCacheKey`, `AICache`
 - `types.ts` — `AIFieldConfig`, `AIFormConfig`, `AIFieldMeta`, `AIFieldUpdate`, `AIFillResult`, `AIFieldError`, `AIFormError`, `AIProvider`
 
+## Releasing & Changesets
+
+This project uses [Changesets](https://github.com/changesets/changesets) for versioning and npm publishing.
+
+**Always create a changeset when making user-facing changes.** Before committing/pushing a feature, bug fix, or breaking change, run `pnpm changeset` or manually create a `.changeset/<name>.md` file:
+
+```md
+---
+"@react-ai-form/core": minor
+"@react-ai-form/react": minor
+---
+
+Description of what changed (becomes the CHANGELOG entry)
+```
+
+- `patch` — bug fixes, docs, internal refactors
+- `minor` — new features, new exports
+- `major` — breaking API changes
+- If a package only changed because a dependency bumped, use `patch`
+- All three packages are **linked** — they release together
+
+**Do NOT manually edit version numbers in package.json** — Changesets handles this.
+
+The release flow:
+1. Changeset file merged to main → GitHub Actions creates a "Version Packages" PR
+2. Merging that PR → publishes all updated packages to npm
+
 ## Build & Dev Commands
 
 ```bash
@@ -105,6 +132,7 @@ pnpm format      # Format with Biome
 pnpm typecheck   # Type-check all packages
 pnpm dev         # Watch mode for all packages
 pnpm clean       # Remove dist, .turbo, node_modules
+pnpm changeset   # Create a changeset for version bump
 ```
 
 Never mention claude in any PR
