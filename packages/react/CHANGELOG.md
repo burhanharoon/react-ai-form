@@ -1,5 +1,11 @@
 # @react-ai-form/react
 
+## 0.2.1
+
+### Patch Changes
+
+- [`efc93a4`](https://github.com/burhanharoon/react-ai-form/commit/efc93a419c25157a04d478b27f0f3304fe347f35) Thanks [@burhanharoon](https://github.com/burhanharoon)! - Document the `useAIFormContext()` and `useResolvedConfig()` hooks in the README. Both have always been public exports from `src/index.ts` but the README only covered the higher-level `useAISuggestion` / `useAIFormFill` / `AIFormProvider` surface. The new "Advanced: reading provider state" subsection explains when to reach for each and what they return — useful for anyone building custom hooks on top of `AIFormProvider`.
+
 ## 0.1.1
 
 ### Patch Changes
