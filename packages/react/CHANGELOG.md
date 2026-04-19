@@ -1,5 +1,14 @@
 # @react-ai-form/react
 
+## 0.2.2
+
+### Patch Changes
+
+- [#21](https://github.com/burhanharoon/react-ai-form/pull/21) [`6f7edbb`](https://github.com/burhanharoon/react-ai-form/commit/6f7edbb9599db776a24a407ccfe760503631ef6f) Thanks [@burhanharoon](https://github.com/burhanharoon)! - Add live demo URL (https://react-ai-form.vercel.app) to each package README so it shows up on npmjs.com.
+
+- Updated dependencies [[`6f7edbb`](https://github.com/burhanharoon/react-ai-form/commit/6f7edbb9599db776a24a407ccfe760503631ef6f)]:
+  - @react-ai-form/core@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes
