@@ -1,4 +1,4 @@
-import { act, renderHook } from "@testing-library/react";
+import { act, fireEvent, render, renderHook, screen } from "@testing-library/react";
 import type { LanguageModelV1 } from "ai";
 import { streamObject } from "ai";
 import { type UseFormReturn, useForm } from "react-hook-form";
@@ -317,5 +317,129 @@ describe("useAIForm", () => {
       result.current.form.setValue("firstName", "Recovered");
     });
     expect(result.current.form.getValues().firstName).toBe("Recovered");
+  });
+
+  // ── Regression tests (CodeRabbit findings) ──────────────────────
+
+  it("register().onChange marks the field user-modified immediately — survives a prior AI fill", async () => {
+    // Scenario:
+    //   1. AI fills firstName → field becomes dirty + ai-filled.
+    //   2. User types into firstName → wrapped onChange must mark it user-modified.
+    //   3. A second AI fill must NOT overwrite the user's value.
+    mockedStreamObject.mockReturnValueOnce(
+      mockStreamObjectReturn([{ firstName: "Ada", lastName: "Lovelace" }]),
+    );
+
+    function Harness() {
+      const form = useForm<FlatValues>({
+        defaultValues: { firstName: "", lastName: "", email: "" },
+      });
+      const ai = useAIForm(form, {
+        schema: flatSchema,
+        model: createMockModel(),
+      });
+      harness.current = { form, ai };
+      return <input aria-label="firstName" {...ai.register("firstName")} />;
+    }
+    const harness: {
+      current: {
+        form: UseFormReturn<FlatValues>;
+        ai: ReturnType<typeof useAIForm<typeof flatSchema>>;
+      } | null;
+    } = { current: null };
+
+    render(<Harness />);
+
+    await act(async () => {
+      await harness.current?.ai.fillForm("Ada");
+    });
+    expect(harness.current?.form.getValues().firstName).toBe("Ada");
+    expect(harness.current?.ai.getFieldStatus("firstName")).toBe("ai-filled");
+
+    const input = screen.getByLabelText("firstName") as HTMLInputElement;
+    fireEvent.change(input, { target: { value: "Burhan" } });
+
+    expect(harness.current?.ai.getFieldStatus("firstName")).toBe("user-modified");
+    expect(harness.current?.form.getValues().firstName).toBe("Burhan");
+
+    mockedStreamObject.mockReturnValueOnce(
+      mockStreamObjectReturn([{ firstName: "Grace", lastName: "Hopper" }]),
+    );
+    await act(async () => {
+      await harness.current?.ai.fillForm("Grace");
+    });
+
+    expect(harness.current?.form.getValues().firstName).toBe("Burhan");
+    expect(harness.current?.form.getValues().lastName).toBe("Hopper");
+  });
+
+  it("onFillComplete runs AFTER form.trigger settles — consumers see validation errors", async () => {
+    // Build a form with a resolver so trigger actually produces errors.
+    const schema = flatSchema;
+    mockedStreamObject.mockReturnValue(
+      mockStreamObjectReturn([{ firstName: "Ada", lastName: "Lovelace", email: "not-an-email" }]),
+    );
+
+    const errorsAtCallback: { keys: string[] } = { keys: [] };
+    const onFillComplete = vi.fn(() => {
+      // Snapshot errors at the moment the callback fires.
+      errorsAtCallback.keys = Object.keys(harness.current?.form.formState.errors ?? {});
+    });
+
+    interface Harness {
+      form: UseFormReturn<FlatValues>;
+      ai: ReturnType<typeof useAIForm<typeof schema>>;
+    }
+    const harness: { current: Harness | null } = { current: null };
+
+    const { result } = renderHook<Harness, undefined>(() => {
+      const form = useForm<FlatValues>({
+        defaultValues: { firstName: "", lastName: "", email: "" },
+        resolver: async (values) => {
+          const parsed = schema.safeParse(values);
+          if (parsed.success) return { values: parsed.data, errors: {} };
+          const errors: Record<string, { type: string; message: string }> = {};
+          for (const issue of parsed.error.issues) {
+            const p = issue.path.join(".");
+            if (!errors[p]) errors[p] = { type: issue.code, message: issue.message };
+          }
+          return { values: {}, errors };
+        },
+      });
+      const ai = useAIForm(form, { schema, model: createMockModel(), onFillComplete });
+      harness.current = { form, ai };
+      return { form, ai };
+    });
+
+    await act(async () => {
+      await result.current.ai.fillForm("Ada");
+    });
+
+    expect(onFillComplete).toHaveBeenCalledTimes(1);
+    expect(errorsAtCallback.keys).toContain("email");
+  });
+
+  it("register(name, options) forwards RegisterOptions to RHF (e.g. valueAsNumber)", () => {
+    const numberSchema = z.object({ age: z.number() });
+    type NumberValues = z.infer<typeof numberSchema>;
+    const harness: { current: UseFormReturn<NumberValues> | null } = { current: null };
+
+    function NumberHarness() {
+      const form = useForm<NumberValues>({ defaultValues: { age: 0 } });
+      const ai = useAIForm(form, { schema: numberSchema, model: createMockModel() });
+      harness.current = form;
+      return (
+        <input aria-label="age" type="number" {...ai.register("age", { valueAsNumber: true })} />
+      );
+    }
+
+    render(<NumberHarness />);
+
+    const input = screen.getByLabelText("age") as HTMLInputElement;
+    fireEvent.change(input, { target: { value: "42" } });
+
+    // valueAsNumber was honoured by RHF → stored as number, not string.
+    expect(harness.current?.getValues().age).toBe(42);
+    expect(typeof harness.current?.getValues().age).toBe("number");
   });
 });

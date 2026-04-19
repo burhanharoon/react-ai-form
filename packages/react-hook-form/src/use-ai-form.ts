@@ -8,8 +8,17 @@ import type {
 import { useAIFormFill } from "@react-ai-form/react";
 import type { LanguageModelV1 } from "ai";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import type { FieldPath, PathValue, UseFormRegisterReturn, UseFormReturn } from "react-hook-form";
+import type {
+  FieldPath,
+  PathValue,
+  RegisterOptions,
+  UseFormRegisterReturn,
+  UseFormReturn,
+} from "react-hook-form";
 import type { ZodObject, ZodRawShape, z } from "zod";
+
+/** Form elements RHF can register — used for broader focus/blur typing. */
+type RegisterableElement = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
 /** Status of an individual field in the AI form fill lifecycle. */
 export type AIFieldStatus = "empty" | "ai-filled" | "user-modified";
@@ -40,7 +49,7 @@ export interface UseAIFormOptions<T extends ZodObject<ZodRawShape>> {
 
 /** Register return enriched with the field's AI status and a focus handler. */
 export type AIRegisterReturn<TName extends string> = UseFormRegisterReturn<TName> & {
-  onFocus: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onFocus: (event: React.FocusEvent<RegisterableElement>) => void;
   "data-ai-status": AIFieldStatus;
 };
 
@@ -48,10 +57,15 @@ export type AIRegisterReturn<TName extends string> = UseFormRegisterReturn<TName
 export interface UseAIFormReturn<T extends ZodObject<ZodRawShape>>
   extends Omit<UseAIFormFillReturn<T>, "reset"> {
   /**
-   * Wraps RHF's `register` with focus tracking and a `data-ai-status`
-   * attribute derived from the field's current AI status.
+   * Wraps RHF's `register` with focus tracking, immediate user-edit marking
+   * on `onChange`, and a `data-ai-status` attribute derived from the field's
+   * current AI status. Accepts the same `options` parameter as RHF's own
+   * `register` (e.g. `{ valueAsNumber: true }`).
    */
-  register: <TName extends FieldPath<z.infer<T>>>(name: TName) => AIRegisterReturn<TName>;
+  register: <TName extends FieldPath<z.infer<T>>>(
+    name: TName,
+    options?: RegisterOptions<z.infer<T>, TName>,
+  ) => AIRegisterReturn<TName>;
 
   /**
    * Reset the AI fill state (filled fields, user-modified tracking, errors).
@@ -122,10 +136,12 @@ export function useAIForm<T extends ZodObject<ZodRawShape>>(
   const onCompleteRef = useRef(onFillComplete);
   onCompleteRef.current = onFillComplete;
 
-  const handleComplete = useCallback((result: AIFillResult) => {
+  const handleComplete = useCallback(async (result: AIFillResult) => {
     const f = formRef.current;
     if (result.filledFields.length > 0) {
-      void f.trigger(result.filledFields as FieldPath<z.infer<T>>[]);
+      // Await so `onFillComplete` consumers can inspect settled
+      // `formState.errors` / `formState.isValid` as the JSDoc promises.
+      await f.trigger(result.filledFields as FieldPath<z.infer<T>>[]);
     }
     onCompleteRef.current?.(result);
   }, []);
@@ -173,8 +189,11 @@ export function useAIForm<T extends ZodObject<ZodRawShape>>(
   }, []);
 
   const register = useCallback(
-    <TName extends FieldPath<z.infer<T>>>(name: TName): AIRegisterReturn<TName> => {
-      const original = form.register(name);
+    <TName extends FieldPath<z.infer<T>>>(
+      name: TName,
+      registerOptions?: RegisterOptions<z.infer<T>, TName>,
+    ): AIRegisterReturn<TName> => {
+      const original = form.register(name, registerOptions);
       const status = getFieldStatus(name);
 
       const wrappedOnFocus = () => {
@@ -198,8 +217,21 @@ export function useAIForm<T extends ZodObject<ZodRawShape>>(
         return original.onBlur(event);
       };
 
+      // Wrap onChange so user edits mark the field user-modified immediately,
+      // even if AI previously wrote it (which leaves `dirtyFields[name] = true`
+      // and would otherwise make our dirty-field diff miss the edit).
+      const wrappedOnChange: typeof original.onChange = (event) => {
+        if (activeFieldRef.current !== name) {
+          activeFieldRef.current = name;
+        }
+        aiWritingPathsRef.current.delete(name);
+        markUserModified(name);
+        return original.onChange(event);
+      };
+
       return {
         ...original,
+        onChange: wrappedOnChange,
         onBlur: wrappedOnBlur,
         onFocus: wrappedOnFocus,
         "data-ai-status": status,
@@ -207,7 +239,7 @@ export function useAIForm<T extends ZodObject<ZodRawShape>>(
     },
     // form.register is stable across renders for a given form, but we depend
     // on `form` so register reflects the latest form instance.
-    [form, getFieldStatus],
+    [form, getFieldStatus, markUserModified],
   );
 
   const reset = useCallback(
