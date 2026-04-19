@@ -99,6 +99,45 @@ const safeSchema = filterSchemaByPrivacy(schema, config);
 const { sanitized } = sanitizeFormDataForAI(formData, schema, config);
 ```
 
+### With React Hook Form
+
+```tsx
+import { useForm } from "react-hook-form";
+import { useAIForm } from "@react-ai-form/react-hook-form";
+import { openai } from "@ai-sdk/openai";
+import { z } from "zod";
+
+const schema = z.object({
+  name: z.string().describe("Full name"),
+  email: z.string().email().describe("Email address"),
+  company: z.string().describe("Company name"),
+});
+
+function ContactForm() {
+  const form = useForm<z.infer<typeof schema>>({
+    defaultValues: { name: "", email: "", company: "" },
+  });
+
+  const { fillForm, register, isFillingForm } = useAIForm(form, {
+    schema,
+    model: openai("gpt-4o"),
+  });
+
+  return (
+    <form onSubmit={form.handleSubmit(console.log)}>
+      <input {...register("name")} />
+      <input {...register("email")} />
+      <input {...register("company")} />
+      <button type="button" onClick={() => fillForm("Ada Lovelace, engineer at Acme")}>
+        {isFillingForm ? "Filling…" : "Fill with AI"}
+      </button>
+    </form>
+  );
+}
+```
+
+AI-streamed values flow into RHF with `shouldDirty: true`, validation runs once after the stream completes, and fields the user is editing are protected from overwrite. See [`@react-ai-form/react-hook-form`](packages/react-hook-form) for `AIFormField`, `AITextField`, and `AIFormStatusProvider`.
+
 ## Architecture
 
 ```
@@ -117,7 +156,10 @@ const { sanitized } = sanitizeFormDataForAI(formData, schema, config);
   AIFormProvider      -- Optional shared config context
 
 @react-ai-form/react-hook-form    (React Hook Form adapter)
-  setValue/trigger integration for AI-generated values
+  useAIForm           -- Flagship hook: wraps useAIFormFill around an RHF useForm
+  AIFormField         -- Render-prop wrapper with per-field ghost text
+  AITextField         -- Pre-composed labelled input with ghost text + badge + error
+  AIFormStatusProvider -- Optional context for nested field status lookup
 ```
 
 ## Development

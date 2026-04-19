@@ -114,6 +114,24 @@ The tsconfig enables `exactOptionalPropertyTypes`, `noUncheckedIndexedAccess`, a
 - `useFocusTrap(ref, active)` — keyboard focus trap
 - `AI_FORM_ARIA_LABELS` — standard ARIA label templates
 
+## React Hook Form Package API
+
+### Hooks
+- `useAIForm(form, options)` — flagship integration: wraps `useAIFormFill` around an existing RHF `useForm` instance. Returns everything `useAIFormFill` returns plus an enhanced `register(name, options?)` that adds a `data-ai-status` attribute, focus tracking, and immediate `markUserModified` on `onChange`. Post-fill `form.trigger` is awaited before `onFillComplete` fires.
+
+### Components
+- `AIFormField` — render-prop wrapper; wires `useAISuggestion` to a single RHF field and exposes `field`, `fieldState`, `suggestion`, `aiStatus`, `acceptSuggestion`, `dismissSuggestion`. Generic is constrained to `FieldPathByValue<TFieldValues, string>`.
+- `AITextField` — pre-composed labelled input with ghost-text + badge + inline error.
+- `AIFormStatusProvider` — optional context so descendant fields derive their AI status from a parent `useAIForm` without prop-drilling.
+
+### Key implementation details
+- `register().onChange` calls `markUserModified(path)` before delegating to RHF's original handler — this is how user edits get protected even when AI previously dirtied the field.
+- Active-field tracking uses `onFocus`/`onBlur` handlers with a 100ms blur debounce so focus-refocus races don't unprotect the field.
+- `reset({ clearValues: true })` also calls `form.reset()`; default `reset()` clears only AI state.
+
+### Re-exports
+The package re-exports everything from `@react-ai-form/react`, so consumers can import both libraries' APIs from a single `@react-ai-form/react-hook-form` entry point.
+
 ## Releasing & Changesets
 
 This project uses [Changesets](https://github.com/changesets/changesets) for versioning and npm publishing.
