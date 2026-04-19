@@ -262,9 +262,15 @@ describe("@react-ai-form/react-hook-form integration", () => {
   it("privacy: ssn marked sensitive is excluded from streamed fill", async () => {
     mockedStreamObject.mockImplementation((opts) => {
       const schema = (opts as unknown as { schema: z.ZodObject<z.ZodRawShape> }).schema;
-      const shape = schema.shape;
-      // Confirm ssn is not in the filtered schema sent to the model.
-      expect(shape).not.toHaveProperty("personal.ssn");
+      // filterSchemaByPrivacy rebuilds nested objects, so `ssn` must be absent
+      // from the INNER `personal` shape (not the outer one). Navigate into the
+      // nested ZodObject and assert against its shape's keys directly.
+      const personalShape = (schema.shape["personal"] as z.ZodObject<z.ZodRawShape>).shape;
+      expect(Object.keys(personalShape)).not.toContain("ssn");
+      // Positive check: other fields in the nested object survive the filter.
+      expect(Object.keys(personalShape)).toEqual(
+        expect.arrayContaining(["firstName", "lastName", "email"]),
+      );
       return mockStreamObject([
         {
           personal: { firstName: "Ada", lastName: "Lovelace", email: "ada@x.com" },
