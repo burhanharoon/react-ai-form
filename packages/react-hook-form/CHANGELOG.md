@@ -1,5 +1,15 @@
 # @react-ai-form/react-hook-form
 
+## 0.2.0
+
+### Minor Changes
+
+- [#14](https://github.com/burhanharoon/react-ai-form/pull/14) [`07ca5f1`](https://github.com/burhanharoon/react-ai-form/commit/07ca5f118fdd45f0b69d39be2906fe33994ba56d) Thanks [@burhanharoon](https://github.com/burhanharoon)! - Add `AIFormField` (render-prop) and `AITextField` (pre-composed) wrapper components, plus an optional `AIFormStatusProvider` context. `AIFormField` wires `useAISuggestion` into a single React Hook Form field and exposes `field`, `fieldState`, `suggestion`, `aiStatus`, and `acceptSuggestion`/`dismissSuggestion` to a render prop. `AITextField` renders a labelled input with ghost-text + confidence badge + inline error message in one shot. `AIFormStatusProvider` lets nested fields derive their AI status from a parent `useAIForm` instance without prop-drilling.
+
+- [#15](https://github.com/burhanharoon/react-ai-form/pull/15) [`5c1909a`](https://github.com/burhanharoon/react-ai-form/commit/5c1909ab2208d1137c293d124344299a341f414d) Thanks [@burhanharoon](https://github.com/burhanharoon)! - End-to-end integration tests for the full Zod → AI → streaming → RHF → validation pipeline, plus an index export overhaul. The package now re-exports everything from `@react-ai-form/react` (hooks, provider, components, types) so consumers can import from a single entry point. 11 integration scenarios cover complete fill flow, streaming progress, privacy/PII exclusion, user-edit preservation during streams, abort, nested paths, post-fill validation, multi-fill abort semantics, error recovery, and fill-complete callbacks.
+
+- [#10](https://github.com/burhanharoon/react-ai-form/pull/10) [`e99bd61`](https://github.com/burhanharoon/react-ai-form/commit/e99bd61c3b6669d8d3aa01ad5f9be172d59601c6) Thanks [@burhanharoon](https://github.com/burhanharoon)! - Add `useAIForm` hook — flagship integration that wires `useAIFormFill` into a React Hook Form instance. AI-streamed values flow through `setValue` with `{ shouldDirty: true, shouldTouch: true }`, focused and user-edited fields are protected from overwrite, and `form.trigger` runs once after the stream completes. Also exposes an enhanced `register` that adds a `data-ai-status` attribute and focus tracking.
+
 ## 0.1.1
 
 ### Patch Changes
