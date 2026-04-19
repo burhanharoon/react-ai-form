@@ -176,8 +176,9 @@ export function SuggestionsDemo() {
           placeholder="wireless, anc, travel"
         />
         <div className="mt-2 flex flex-wrap gap-1.5">
-          {tags.map(tag => (
-            <Badge key={tag} variant="secondary">
+          {tags.map((tag, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: tag input can contain duplicates by design
+            <Badge key={`${tag}-${index}`} variant="secondary">
               {tag}
             </Badge>
           ))}

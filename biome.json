@@ -6,6 +6,7 @@
       "packages/**/src/**/*.tsx",
       "apps/**/*.ts",
       "apps/**/*.tsx",
+      "!apps/**/next-env.d.ts",
       "!apps/**/.next",
       "!apps/**/dist",
       "!apps/**/node_modules",
