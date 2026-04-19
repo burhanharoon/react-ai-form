@@ -12,6 +12,24 @@ Enhance your React forms with AI capabilities. Connect LLM providers to React fo
 - **Accessible** -- WCAG 2.2 AA compliant, full keyboard navigation, screen reader support
 - **Progressive enhancement** -- forms work without AI; AI features are additive
 
+## Demo
+
+Three interactive examples live in [apps/demo](apps/demo):
+
+- **One-click form fill** — `streamObject`-backed contact form.
+- **Ghost-text suggestions** — Gmail-style per-field autocomplete.
+- **Bio-to-application** — PII-redacted LinkedIn bio → 9-field application.
+
+Run locally:
+
+```bash
+pnpm install
+pnpm build --filter='@react-ai-form/*'
+pnpm --filter demo dev
+```
+
+Open http://localhost:3000. No `OPENAI_API_KEY` needed — the server falls back to hardcoded streaming fixtures. Set the key to hit real `gpt-4o-mini`.
+
 ## Packages
 
 | Package | Description | npm |
@@ -167,11 +185,16 @@ AI-streamed values flow into RHF with `shouldDirty: true`, validation runs once 
 ```bash
 pnpm install       # Install dependencies
 pnpm build         # Build all packages
-pnpm test          # Run all tests (220+)
+pnpm test          # Run all tests
 pnpm lint          # Lint with Biome
 pnpm typecheck     # Type-check all packages
 pnpm dev           # Watch mode
 pnpm changeset     # Create a changeset for version bump
+
+# Demo-specific
+pnpm --filter demo dev            # Run Next.js 16 demo at :3000
+pnpm --filter demo build          # Production build of the demo
+pnpm build --filter=demo...       # Build library packages + demo (for deploy)
 ```
 
 ## License

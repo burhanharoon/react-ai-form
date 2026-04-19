@@ -8,3 +8,4 @@ coverage
 prompts
 .DS_Store
 .claude/
+.vscode/

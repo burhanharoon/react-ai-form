@@ -1,7 +1,17 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.4.11/schema.json",
   "files": {
-    "includes": ["packages/**/src/**/*.ts", "packages/**/src/**/*.tsx", "*.json"]
+    "includes": [
+      "packages/**/src/**/*.ts",
+      "packages/**/src/**/*.tsx",
+      "apps/**/*.ts",
+      "apps/**/*.tsx",
+      "!apps/**/next-env.d.ts",
+      "!apps/**/.next",
+      "!apps/**/dist",
+      "!apps/**/node_modules",
+      "*.json"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -43,5 +53,41 @@
       "trailingCommas": "all",
       "arrowParentheses": "always"
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["apps/demo/**/*.ts", "apps/demo/**/*.tsx"],
+      "javascript": {
+        "formatter": {
+          "semicolons": "asNeeded",
+          "arrowParentheses": "asNeeded"
+        }
+      },
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "error"
+          },
+          "style": {
+            "useTemplate": "error",
+            "useShorthandAssign": "error",
+            "useSelfClosingElements": "error",
+            "useConsistentArrayType": {
+              "level": "error",
+              "options": { "syntax": "shorthand" }
+            }
+          },
+          "correctness": {
+            "useHookAtTopLevel": "error"
+          },
+          "performance": {
+            "noBarrelFile": "error"
+          },
+          "complexity": {
+            "noForEach": "error"
+          }
+        }
+      }
+    }
+  ]
 }
