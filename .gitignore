@@ -7,3 +7,4 @@ coverage
 .env.*
 prompts
 .DS_Store
+.claude/
