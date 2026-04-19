@@ -317,4 +317,111 @@ describe("AITextField", () => {
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent("too short");
   });
+
+  // ── Accessibility tests ────────────────────────────────────────
+
+  it("announces new suggestions via aria-live polite region", () => {
+    // Start with no suggestion so lastAnnouncedRef is null, then rerender with
+    // a suggestion so the diff triggers the announcement (matches the component's
+    // own test pattern).
+    mockedUseAISuggestion.mockReturnValue(defaultSuggestionReturn());
+    const formRef = createFormRef<FlatValues>();
+
+    const { rerender } = render(
+      <FlatHarness formRef={formRef}>
+        {(form) => (
+          <AITextField<FlatValues, "firstName"> form={form} name="firstName" label="First name" />
+        )}
+      </FlatHarness>,
+    );
+
+    const live = screen.getByRole("status");
+    expect(live).toHaveAttribute("aria-live", "polite");
+    expect(live).toHaveTextContent("");
+
+    mockedUseAISuggestion.mockReturnValue(
+      defaultSuggestionReturn({ suggestion: "hn Doe", accept: vi.fn(() => "John Doe") }),
+    );
+    rerender(
+      <FlatHarness formRef={formRef}>
+        {(form) => (
+          <AITextField<FlatValues, "firstName"> form={form} name="firstName" label="First name" />
+        )}
+      </FlatHarness>,
+    );
+
+    expect(live).toHaveTextContent(/Suggestion available: hn Doe/);
+    expect(live).toHaveTextContent(/Tab to accept/i);
+  });
+
+  it("exposes accept/dismiss keyboard instructions via aria-describedby", () => {
+    mockedUseAISuggestion.mockReturnValue(
+      defaultSuggestionReturn({ suggestion: "hn Doe", accept: vi.fn(() => "John Doe") }),
+    );
+    const formRef = createFormRef<FlatValues>();
+
+    render(
+      <FlatHarness formRef={formRef}>
+        {(form) => (
+          <AITextField<FlatValues, "firstName"> form={form} name="firstName" label="First name" />
+        )}
+      </FlatHarness>,
+    );
+
+    const input = screen.getByLabelText("First name") as HTMLInputElement;
+    const describedBy = input.getAttribute("aria-describedby");
+    expect(describedBy).not.toBeNull();
+
+    const instruction = document.getElementById(describedBy as string);
+    expect(instruction).not.toBeNull();
+    expect(instruction?.textContent).toMatch(/Tab to accept/i);
+    expect(instruction?.textContent).toMatch(/Escape to dismiss/i);
+  });
+
+  it("accepts the suggestion on Tab and writes the full value back into the form", () => {
+    mockedUseAISuggestion.mockReturnValue(
+      defaultSuggestionReturn({
+        suggestion: "hn Doe",
+        accept: vi.fn(() => "John Doe"),
+      }),
+    );
+    const formRef = createFormRef<FlatValues>();
+
+    render(
+      <FlatHarness formRef={formRef}>
+        {(form) => (
+          <AITextField<FlatValues, "firstName"> form={form} name="firstName" label="First name" />
+        )}
+      </FlatHarness>,
+    );
+
+    const input = screen.getByLabelText("First name") as HTMLInputElement;
+    fireEvent.keyDown(input, { key: "Tab" });
+
+    expect(formRef.current?.getValues("firstName")).toBe("John Doe");
+  });
+
+  it("dismisses the suggestion on Escape", () => {
+    const dismiss = vi.fn();
+    mockedUseAISuggestion.mockReturnValue(
+      defaultSuggestionReturn({
+        suggestion: "hn Doe",
+        dismiss,
+      }),
+    );
+    const formRef = createFormRef<FlatValues>();
+
+    render(
+      <FlatHarness formRef={formRef}>
+        {(form) => (
+          <AITextField<FlatValues, "firstName"> form={form} name="firstName" label="First name" />
+        )}
+      </FlatHarness>,
+    );
+
+    const input = screen.getByLabelText("First name") as HTMLInputElement;
+    fireEvent.keyDown(input, { key: "Escape" });
+
+    expect(dismiss).toHaveBeenCalled();
+  });
 });
