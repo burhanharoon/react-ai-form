@@ -94,6 +94,13 @@ function App() {
 
 The provider is optional. All hooks accept `model` and `config` as direct props too.
 
+### Advanced: reading provider state
+
+Two lower-level hooks are exported for consumers building custom hooks on top of the provider:
+
+- **`useAIFormContext()`** -- access the `AIFormProvider` value directly. Throws if called outside a provider, so reach for this when the provider is required.
+- **`useResolvedConfig(hookProps?)`** -- merges `hookProps > context > defaults` into a single `ResolvedConfig`. Returns the resolved `model`, `apiEndpoint`, `config`, and `cache`. Used internally by `useAIFormFill` and `useAISuggestion` so they work with or without a provider — reuse it when writing your own hook with the same behaviour.
+
 ## Components
 
 ### `AIFieldSuggestion` -- Ghost text overlay
