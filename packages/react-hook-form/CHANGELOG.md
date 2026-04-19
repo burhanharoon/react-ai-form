@@ -1,5 +1,14 @@
 # @react-ai-form/react-hook-form
 
+## 0.2.1
+
+### Patch Changes
+
+- [`efc93a4`](https://github.com/burhanharoon/react-ai-form/commit/efc93a419c25157a04d478b27f0f3304fe347f35) Thanks [@burhanharoon](https://github.com/burhanharoon)! - Rewrite README to document the v3 adapter API (`useAIForm`, `AIFormField`, `AITextField`, `AIFormStatusProvider`). The previous README still described the package as "under active development" and showed the pre-v3 manual `setValue` / `trigger` pattern.
+
+- Updated dependencies [[`efc93a4`](https://github.com/burhanharoon/react-ai-form/commit/efc93a419c25157a04d478b27f0f3304fe347f35)]:
+  - @react-ai-form/react@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
