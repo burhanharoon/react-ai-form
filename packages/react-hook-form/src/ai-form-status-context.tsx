@@ -8,9 +8,15 @@ export type GetFieldStatus = (path: string) => AIFieldStatus;
 
 const AIFormStatusContext = createContext<GetFieldStatus | null>(null);
 
+/**
+ * Props for {@link AIFormStatusProvider}. Forwards the `getFieldStatus`
+ * lookup from a parent `useAIForm` instance into descendant
+ * {@link AIFormField} / {@link AITextField} components via React context.
+ */
 export interface AIFormStatusProviderProps {
   /** The `getFieldStatus` function from {@link useAIForm}. */
   getFieldStatus: GetFieldStatus;
+  /** Descendant components that should read the status lookup. */
   children: ReactNode;
 }
 

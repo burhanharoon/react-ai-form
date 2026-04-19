@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import type {
   ControllerFieldState,
   FieldPath,
+  FieldPathByValue,
   FieldValues,
   PathValue,
   UseFormRegisterReturn,
@@ -33,13 +34,20 @@ export interface AIFormFieldRenderProps<TName extends string = string> {
   aiStatus: AIFieldStatus;
 }
 
+/**
+ * Props for the {@link AIFormField} render-prop component.
+ *
+ * `TFieldValues` is the RHF form shape; `TName` is constrained to field
+ * paths whose value is a `string` because {@link useAISuggestion} only
+ * generates string completions.
+ */
 export interface AIFormFieldProps<
   TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>,
+  TName extends FieldPathByValue<TFieldValues, string>,
 > {
   /** RHF form instance. */
   form: UseFormReturn<TFieldValues>;
-  /** Field name (type-safe RHF path). */
+  /** Field name (type-safe RHF path, must reference a string-typed field). */
   name: TName;
   /** Optional Zod schema for the field, used to enrich suggestion prompts. */
   schema?: ZodType;
@@ -55,6 +63,9 @@ export interface AIFormFieldProps<
  * Render-prop component that wires a single React Hook Form field to
  * `useAISuggestion` and exposes its AI status, suggestion text, and accept
  * handler. Layout is yours to control.
+ *
+ * Accepting a suggestion writes the combined value via `form.setValue` and
+ * triggers validation on the field so `fieldState.error` stays in sync.
  *
  * @example
  * ```tsx
@@ -73,7 +84,7 @@ export interface AIFormFieldProps<
  */
 export function AIFormField<
   TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>,
+  TName extends FieldPathByValue<TFieldValues, string>,
 >({
   form,
   name,
@@ -81,9 +92,9 @@ export function AIFormField<
   aiSuggestion = false,
   render,
 }: AIFormFieldProps<TFieldValues, TName>): ReactElement {
-  const field = form.register(name);
-  const fieldState = form.getFieldState(name, form.formState);
-  const currentValue = form.watch(name);
+  const field = form.register(name as FieldPath<TFieldValues>) as UseFormRegisterReturn<TName>;
+  const fieldState = form.getFieldState(name as FieldPath<TFieldValues>, form.formState);
+  const currentValue = form.watch(name as FieldPath<TFieldValues>);
 
   const suggestionResult = useAISuggestion({
     fieldName: name,
@@ -95,11 +106,17 @@ export function AIFormField<
   const acceptSuggestion = useCallback(() => {
     if (!suggestionResult.suggestion) return;
     const fullValue = suggestionResult.accept();
-    form.setValue(name, fullValue as PathValue<TFieldValues, TName>, {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: false,
-    });
+    form.setValue(
+      name as FieldPath<TFieldValues>,
+      fullValue as PathValue<TFieldValues, FieldPath<TFieldValues>>,
+      {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: false,
+      },
+    );
+    // Re-validate so the field's error state reflects the new value.
+    void form.trigger(name as FieldPath<TFieldValues>);
   }, [form, name, suggestionResult]);
 
   const aiStatus = useResolvedAIStatus(name, fieldState.isDirty);
@@ -117,9 +134,16 @@ export function AIFormField<
 
 // ── AITextField ────────────────────────────────────────────────────
 
+/**
+ * Props for the {@link AITextField} convenience component.
+ *
+ * Extends {@link AIFormFieldProps} (minus `render`) with layout props
+ * (`label`, `placeholder`, `type`, `aiBadge`, `className`) for a
+ * batteries-included field UI.
+ */
 export interface AITextFieldProps<
   TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>,
+  TName extends FieldPathByValue<TFieldValues, string>,
 > extends Omit<AIFormFieldProps<TFieldValues, TName>, "render"> {
   /** Visible label rendered above the input. */
   label?: ReactNode;
@@ -141,7 +165,7 @@ export interface AITextFieldProps<
  */
 export function AITextField<
   TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>,
+  TName extends FieldPathByValue<TFieldValues, string>,
 >({
   form,
   name,
