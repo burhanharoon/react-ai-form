@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import { DemoProvider } from "@/components/demo-provider"
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <SiteFooter />
           </DemoProvider>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
