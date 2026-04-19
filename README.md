@@ -14,7 +14,9 @@ Enhance your React forms with AI capabilities. Connect LLM providers to React fo
 
 ## Demo
 
-Three interactive examples live in [apps/demo](apps/demo):
+**Live:** https://react-ai-form.vercel.app · source in [apps/demo](apps/demo).
+
+Three interactive examples:
 
 - **One-click form fill** — `streamObject`-backed contact form.
 - **Ghost-text suggestions** — Gmail-style per-field autocomplete.
