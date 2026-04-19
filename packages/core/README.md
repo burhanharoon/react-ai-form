@@ -2,6 +2,8 @@
 
 Provider-agnostic core for AI-powered forms. Zero React dependency -- pure TypeScript that works in any JS runtime.
 
+> 🧪 See it in action at **https://react-ai-form.vercel.app** ([source](../../apps/demo)).
+
 ## Install
 
 ```bash

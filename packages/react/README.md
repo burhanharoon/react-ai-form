@@ -2,6 +2,8 @@
 
 Headless React hooks and accessible components for AI-powered forms. Form-library agnostic -- works with React Hook Form, TanStack Form, or plain React state.
 
+> 🧪 See it in action at **https://react-ai-form.vercel.app** ([source](../../apps/demo)).
+
 ## Install
 
 ```bash
