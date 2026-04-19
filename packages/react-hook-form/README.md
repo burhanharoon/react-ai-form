@@ -2,6 +2,8 @@
 
 React Hook Form adapter for react-ai-form. Drop in `useAIForm` to make AI-generated values flow into your RHF form with proper dirty tracking, post-fill validation, and protection for the fields the user is actively editing.
 
+> 🧪 See it in action at **https://react-ai-form.vercel.app** ([source](../../apps/demo)).
+
 ## Install
 
 ```bash
