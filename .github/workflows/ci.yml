@@ -75,8 +75,12 @@ jobs:
             --config.overrides.@types/react=^18.3.0 \
             --config.overrides.@types/react-dom=^18.3.0
 
-      - name: Test
-        run: pnpm test
-
+      # Build before test — the react-hook-form test suite imports
+      # @react-ai-form/react via its published entry point, so dist/
+      # needs to exist. The main matrix happens to build implicitly
+      # (typecheck → ^build in turbo), but this job skips typecheck.
       - name: Build
         run: pnpm build
+
+      - name: Test
+        run: pnpm test
