@@ -43,6 +43,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
+    "postbuild": "node ../../scripts/add-use-client.mjs dist/index.js dist/index.cjs",
     "dev": "tsup --watch",
     "test": "vitest run",
     "lint": "echo \"no linter yet\"",

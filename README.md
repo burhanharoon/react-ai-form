@@ -76,6 +76,22 @@ That's it. `useAIForm` wires streaming AI output into RHF `setValue` with `{ sho
 
 ---
 
+## Compatibility
+
+| Environment | Status |
+|---|---|
+| React 18.2+ | ✅ tested in CI on every PR |
+| React 19 | ✅ tested in CI on every PR (default) |
+| Next.js 14 / 15 / 16 App Router | ✅ ships `"use client"` — importable from any component |
+| Next.js Pages Router | ✅ |
+| Vite + React | ✅ |
+| Remix / React Router 7 | ✅ client-only boundary |
+| React Server Components | ✅ `@react-ai-form/core` only — no React or DOM dependencies |
+
+The `react` and `react-hook-form` packages emit a `"use client"` directive on every build output so App Router apps can import them from Server Components without a consumer-side pragma. `core` is pure TypeScript with zero React/DOM imports — safe to import from Server Components for server-side PII redaction, schema prompt construction, or privacy filtering.
+
+---
+
 ## Demo
 
 Three interactive examples live in [apps/demo](apps/demo):

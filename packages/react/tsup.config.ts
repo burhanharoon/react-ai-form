@@ -11,4 +11,7 @@ export default defineConfig({
   minify: true,
   target: "es2022",
   external: ["react", "react-dom", "zod", "ai", "@react-ai-form/core"],
+  // A "use client" directive is injected into every dist file by a
+  // postbuild script — esbuild strips it when passed via tsup's banner
+  // option, so we prepend it afterwards. See scripts/add-use-client.mjs.
 });
