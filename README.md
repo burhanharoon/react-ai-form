@@ -58,7 +58,7 @@ export function ContactForm() {
 }
 ```
 
-That's it. `useAIForm` wires streaming AI output into RHF with `shouldDirty: true`, awaits `form.trigger()` after the stream finishes so `formState.errors` is current, and protects any field the user is actively editing from being overwritten.
+That's it. `useAIForm` wires streaming AI output into RHF `setValue` with `{ shouldDirty: true, shouldTouch: true, shouldValidate: false }`, awaits `form.trigger()` after the stream finishes so `formState.errors` is current, and protects any field the user is actively editing from being overwritten.
 
 ---
 
