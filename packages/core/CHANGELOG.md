@@ -1,5 +1,11 @@
 # @react-ai-form/core
 
+## 0.2.5
+
+### Patch Changes
+
+- [#28](https://github.com/burhanharoon/react-ai-form/pull/28) [`599e556`](https://github.com/burhanharoon/react-ai-form/commit/599e5567868f3176008e8ed4b318dbf435088df0) Thanks [@burhanharoon](https://github.com/burhanharoon)! - Ship a `"use client"` directive on every build output of the React and React Hook Form adapter packages so Next.js App Router apps can import from Server Components without a consumer-side pragma. A dedicated CI job now runs the full test suite against React 18 on every PR to lock the `^18.0.0 || ^19.0.0` peer range. `@react-ai-form/core` has no React or DOM dependencies — a new module-graph contract test proves every public export can be invoked without a client-only global, so it's safe to import from React Server Components.
+
 ## 0.2.4
 
 ### Patch Changes
