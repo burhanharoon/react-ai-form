@@ -96,6 +96,25 @@ Open http://localhost:3000. No `OPENAI_API_KEY` needed — the server falls back
 
 ---
 
+## Examples
+
+Self-contained, copy-paste-ready files for each feature live in [`examples/`](./examples/). Drop any one into a Next.js page or `src/App.tsx` and it runs.
+
+| # | File | What it shows |
+|---|------|---------------|
+| 01 | [basic-form-fill](./examples/01-basic-form-fill.tsx) | Simplest `useAIForm` + `fillForm` integration |
+| 02 | [ghost-text-suggestions](./examples/02-ghost-text-suggestions.tsx) | Gmail-style per-field autocomplete |
+| 03 | [privacy-config](./examples/03-privacy-config.tsx) | Sensitive-field opt-out + PII redaction |
+| 04 | [shadcn-ui-integration](./examples/04-shadcn-ui-integration.tsx) | `useAIForm` inside shadcn/ui `Form` |
+| 05 | [streaming-progress](./examples/05-streaming-progress.tsx) | Progress bar + per-field flash via `data-ai-status` |
+| 06 | [custom-provider-ollama](./examples/06-custom-provider-ollama.tsx) | Local Ollama model, no data leaves the machine |
+| 07 | [multi-step-form](./examples/07-multi-step-form.tsx) | Wizard flow with `z.extend()` schema composition |
+| 08 | [natural-language-fill](./examples/08-natural-language-fill.tsx) | Free text → structured flight-booking fields |
+
+See [`examples/README.md`](./examples/README.md) for setup instructions.
+
+---
+
 ## Installation
 
 Three packages, pick what you need:
