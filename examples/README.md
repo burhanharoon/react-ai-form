@@ -35,10 +35,11 @@ npm install @react-ai-form/react-hook-form react-hook-form zod \
 # Example 04 also needs shadcn: pnpm dlx shadcn@latest add form input button label
 ```
 
-Paste an example into `app/demo/page.tsx` and export it as `default`:
+Paste an example into `app/demo/page.tsx` (or move it there and re-export):
 
 ```tsx
-export { BasicFormFillExample as default } from "./basic-form-fill";
+// app/demo/page.tsx
+export { BasicFormFillExample as default } from "./01-basic-form-fill";
 ```
 
 Then:

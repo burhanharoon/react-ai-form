@@ -71,8 +71,14 @@ export function PrivacyConfigExample() {
     await ai.fillForm(redacted);
   };
 
+  // Never log sensitive fields — strip ssn/password before any side effect.
+  const onSubmit = (data: Application) => {
+    const { ssn: _ssn, password: _password, ...safe } = data;
+    console.log("submit (redacted):", safe);
+  };
+
   return (
-    <form onSubmit={form.handleSubmit((data) => console.log(data))}>
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       <input {...ai.register("email")} placeholder="Email" />
       <input {...ai.register("notes")} placeholder="Notes (AI fills this)" />
       <input {...ai.register("ssn")} placeholder="SSN (AI never sees this)" />

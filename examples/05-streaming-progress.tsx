@@ -85,7 +85,7 @@ export function StreamingProgressExample() {
         <div className="progress-track">
           <div className="progress-fill" style={{ width: `${percent}%` }} />
         </div>
-        <p>
+        <p role="status" aria-live="polite">
           {ai.isFillingForm
             ? `Streaming… ${ai.progress.filled}/${ai.progress.total}`
             : percent === 100

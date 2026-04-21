@@ -119,6 +119,7 @@ export function MultiStepFormExample() {
           ) : (
             <input
               id={name}
+              type={name === "yearsExperience" ? "number" : "text"}
               {...ai.register(
                 name,
                 name === "yearsExperience" ? { valueAsNumber: true } : undefined,
