@@ -50,6 +50,9 @@ jobs:
       - name: Bundle size check
         run: pnpm size
 
+      - name: Publish checks (publint + arethetypeswrong)
+        run: pnpm check:publish
+
   compat-react-18:
     name: Compat (React 18)
     runs-on: ubuntu-latest
