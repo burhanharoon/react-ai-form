@@ -1,5 +1,14 @@
 # @react-ai-form/react
 
+## 0.2.6
+
+### Patch Changes
+
+- [#30](https://github.com/burhanharoon/react-ai-form/pull/30) [`7c33d15`](https://github.com/burhanharoon/react-ai-form/commit/7c33d1511e53a5a41beda91fae691547a5f9c582) Thanks [@burhanharoon](https://github.com/burhanharoon)! - Ship a `LICENSE` file (MIT) inside every published tarball and set the `author` and `publishConfig.provenance: true` fields so each release now carries a GitHub-signed provenance attestation. Broaden the `keywords` on each package for better npm discoverability — no runtime behaviour changes.
+
+- Updated dependencies [[`7c33d15`](https://github.com/burhanharoon/react-ai-form/commit/7c33d1511e53a5a41beda91fae691547a5f9c582)]:
+  - @react-ai-form/core@0.2.6
+
 ## 0.2.5
 
 ### Patch Changes
