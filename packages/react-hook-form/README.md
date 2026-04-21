@@ -1,8 +1,23 @@
 # @react-ai-form/react-hook-form
 
-React Hook Form adapter for react-ai-form. Drop in `useAIForm` to make AI-generated values flow into your RHF form with proper dirty tracking, post-fill validation, and protection for the fields the user is actively editing.
+**React Hook Form adapter for react-ai-form.** Drop in `useAIForm` and AI-generated values flow into your RHF form with proper dirty tracking, post-fill validation, and protection for the fields the user is actively editing.
+
+[![npm](https://img.shields.io/npm/v/@react-ai-form/react-hook-form.svg?color=cb3837&label=npm)](https://www.npmjs.com/package/@react-ai-form/react-hook-form)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@react-ai-form/react-hook-form.svg?label=min%2Bgzip)](https://bundlephobia.com/package/@react-ai-form/react-hook-form)
+[![license](https://img.shields.io/npm/l/@react-ai-form/react-hook-form.svg)](./package.json)
 
 > 🧪 See it in action at **https://react-ai-form.vercel.app** ([source](../../apps/demo)).
+
+## When to use this package
+
+**Recommended for most React apps.** If you already use React Hook Form (or are starting a new form and picking one), install this. It re-exports everything from [`@react-ai-form/react`](../react) plus four RHF-specific extras:
+
+- `useAIForm(form, options)` — the flagship hook. Wraps `useAIFormFill` and wires AI output into RHF's `setValue` / `trigger` lifecycle.
+- `AIFormField` — render-prop wrapper for per-field ghost-text suggestions tied to an RHF field.
+- `AITextField` — batteries-included labelled input with ghost text + confidence badge + inline error.
+- `AIFormStatusProvider` — optional context so nested fields get their status without prop drilling.
+
+Not using RHF? Pick [`@react-ai-form/react`](../react) instead.
 
 ## Install
 

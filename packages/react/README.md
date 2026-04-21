@@ -1,8 +1,18 @@
 # @react-ai-form/react
 
-Headless React hooks and accessible components for AI-powered forms. Form-library agnostic -- works with React Hook Form, TanStack Form, or plain React state.
+**Headless React hooks and accessible components for AI-powered forms.** Form-library agnostic — works with React Hook Form, TanStack Form, Formik, or plain React state. WCAG 2.2 AA out of the box.
+
+[![npm](https://img.shields.io/npm/v/@react-ai-form/react.svg?color=cb3837&label=npm)](https://www.npmjs.com/package/@react-ai-form/react)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@react-ai-form/react.svg?label=min%2Bgzip)](https://bundlephobia.com/package/@react-ai-form/react)
+[![license](https://img.shields.io/npm/l/@react-ai-form/react.svg)](./package.json)
 
 > 🧪 See it in action at **https://react-ai-form.vercel.app** ([source](../../apps/demo)).
+
+## When to use this package
+
+Pick `@react-ai-form/react` if you use **TanStack Form, Formik, Conform, or plain React state**. You get `useAIFormFill`, `useAISuggestion`, and the styled components (`AIFieldSuggestion`, `AIFormFillerButton`, `AIConfidenceBadge`) — you wire the streaming updates into your form library via the `onFieldUpdate` callback.
+
+Using React Hook Form? Install [`@react-ai-form/react-hook-form`](../react-hook-form) instead — it re-exports this entire package plus `useAIForm`, `AIFormField`, and `AITextField` for zero-wiring RHF integration.
 
 ## Install
 
