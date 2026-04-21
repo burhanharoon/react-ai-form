@@ -1,0 +1,23 @@
+[
+  {
+    "name": "@react-ai-form/core",
+    "path": "packages/core/dist/index.js",
+    "limit": "5 KB",
+    "gzip": true,
+    "ignore": ["zod", "ai"]
+  },
+  {
+    "name": "@react-ai-form/react (includes core)",
+    "path": "packages/react/dist/index.js",
+    "limit": "8 KB",
+    "gzip": true,
+    "ignore": ["zod", "ai", "react", "react-dom"]
+  },
+  {
+    "name": "@react-ai-form/react-hook-form (full stack)",
+    "path": "packages/react-hook-form/dist/index.js",
+    "limit": "10 KB",
+    "gzip": true,
+    "ignore": ["zod", "ai", "react", "react-dom", "react-hook-form"]
+  }
+]
