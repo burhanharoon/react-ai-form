@@ -2,9 +2,11 @@
   "name": "@react-ai-form/core",
   "version": "0.2.4",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "Core utilities for AI-powered React forms — schema extraction, privacy filtering, streaming, caching",
+  "author": "Burhan Haroon <burhanharoon@outlook.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/burhanharoon/react-ai-form.git",
@@ -17,6 +19,8 @@
   "keywords": [
     "react",
     "ai",
+    "ai-sdk",
+    "autofill",
     "forms",
     "zod",
     "schema",

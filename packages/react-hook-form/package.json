@@ -2,9 +2,11 @@
   "name": "@react-ai-form/react-hook-form",
   "version": "0.2.4",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "React Hook Form adapter for react-ai-form — connects AI hooks to React Hook Form's setValue/trigger API",
+  "author": "Burhan Haroon <burhanharoon@outlook.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/burhanharoon/react-ai-form.git",
@@ -17,9 +19,13 @@
   "keywords": [
     "react",
     "ai",
+    "ai-sdk",
+    "autofill",
     "forms",
     "react-hook-form",
-    "adapter"
+    "adapter",
+    "llm",
+    "zod"
   ],
   "type": "module",
   "main": "./dist/index.cjs",

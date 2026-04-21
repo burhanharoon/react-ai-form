@@ -2,9 +2,11 @@
   "name": "@react-ai-form/react",
   "version": "0.2.4",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   },
   "description": "React hooks and components for AI-powered forms — suggestions, form fill, ghost text, accessible UI",
+  "author": "Burhan Haroon <burhanharoon@outlook.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/burhanharoon/react-ai-form.git",
@@ -17,12 +19,16 @@
   "keywords": [
     "react",
     "ai",
+    "ai-sdk",
+    "autofill",
     "forms",
     "hooks",
     "suggestions",
     "ghost-text",
     "accessibility",
-    "streaming"
+    "streaming",
+    "llm",
+    "zod"
   ],
   "type": "module",
   "main": "./dist/index.cjs",
