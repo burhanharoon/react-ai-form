@@ -1,0 +1,46 @@
+name: Feature request
+description: Suggest a new feature, API, adapter, or integration.
+title: "[feat]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Feature ideas are very welcome. For larger API changes, opening this issue before writing code helps us align on scope.
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: What problem would this solve? What are you trying to do that the current API makes hard?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed API
+      description: A rough sketch is fine — types, hook signature, or a snippet of how you'd want to use it.
+      render: tsx
+      placeholder: |
+        const { fillForm } = useAIForm(form, {
+          schema,
+          model,
+          // new option:
+          onFieldUpdate: (field, value) => { /* ... */ },
+        });
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Existing APIs you tried, or other libraries that solve this differently.
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      description: Happy to help land this yourself?
+      options:
+        - label: I'd be willing to open a PR for this.
+          required: false
