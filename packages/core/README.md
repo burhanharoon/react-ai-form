@@ -1,8 +1,16 @@
 # @react-ai-form/core
 
-Provider-agnostic core for AI-powered forms. Zero React dependency -- pure TypeScript that works in any JS runtime.
+**Provider-agnostic, zero-React core for AI-powered forms.** Pure TypeScript — schema introspection, streaming routers, privacy utilities, and an LRU cache. Runs anywhere JavaScript runs.
+
+[![npm](https://img.shields.io/npm/v/@react-ai-form/core.svg?color=cb3837&label=npm)](https://www.npmjs.com/package/@react-ai-form/core)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/@react-ai-form/core.svg?label=min%2Bgzip)](https://bundlephobia.com/package/@react-ai-form/core)
+[![license](https://img.shields.io/npm/l/@react-ai-form/core.svg)](./package.json)
 
 > 🧪 See it in action at **https://react-ai-form.vercel.app** ([source](../../apps/demo)).
+
+## When to use this package
+
+Install `@react-ai-form/core` directly **only if you need schema / privacy utilities in Node or a non-React environment** (e.g., server-side PII redaction, schema-to-prompt generation in a background job). If you're building a React app, you almost certainly want [`@react-ai-form/react`](../react) or [`@react-ai-form/react-hook-form`](../react-hook-form) — both re-export everything you need from here.
 
 ## Install
 
