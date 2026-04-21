@@ -1,0 +1,85 @@
+name: Bug report
+description: Something is broken, misbehaving, or regressed between versions.
+title: "[bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. A minimal reproduction link (CodeSandbox, StackBlitz, or a small public repo) makes a fix dramatically faster — please include one if you can.
+
+  - type: dropdown
+    id: package
+    attributes:
+      label: Package
+      description: Which package is the bug in?
+      options:
+        - "@react-ai-form/core"
+        - "@react-ai-form/react"
+        - "@react-ai-form/react-hook-form"
+        - "not sure"
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      description: Run `npm ls @react-ai-form/react-hook-form` (or the package you're using) and paste the version.
+      placeholder: "0.2.4"
+    validations:
+      required: true
+
+  - type: input
+    id: react-version
+    attributes:
+      label: React version
+      placeholder: "18.3.1 or 19.1.0"
+    validations:
+      required: true
+
+  - type: input
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Link to a CodeSandbox, StackBlitz, or public repo that reproduces the bug.
+      placeholder: "https://stackblitz.com/edit/..."
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Set up a form with `useAIForm`...
+        2. Call `fillForm("...")`...
+        3. Observe that...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Paste any error messages or unexpected output here.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, Node version, bundler (Vite / Next.js / etc.).
+      placeholder: |
+        - Browser: Chrome 130
+        - OS: macOS 15
+        - Node: 22.22.0
+        - Framework: Next.js 16 (App Router)
+    validations:
+      required: true

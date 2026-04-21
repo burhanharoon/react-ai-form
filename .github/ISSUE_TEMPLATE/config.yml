@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question / how-to
+    url: https://github.com/burhanharoon/react-ai-form/discussions
+    about: Not sure if it's a bug? Trying to figure out an integration? Ask in Discussions.
+  - name: Live demo
+    url: https://react-ai-form.vercel.app
+    about: Play with the three interactive demos before filing a bug.
