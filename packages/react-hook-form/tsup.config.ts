@@ -7,5 +7,16 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  external: ["react", "react-dom", "react-hook-form"],
+  treeshake: true,
+  minify: true,
+  target: "es2022",
+  external: [
+    "react",
+    "react-dom",
+    "react-hook-form",
+    "zod",
+    "ai",
+    "@react-ai-form/react",
+    "@react-ai-form/core",
+  ],
 });

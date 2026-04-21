@@ -7,4 +7,8 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
+  treeshake: true,
+  minify: true,
+  target: "es2022",
+  external: ["zod", "ai"],
 });
