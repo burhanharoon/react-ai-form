@@ -1,5 +1,11 @@
 # @react-ai-form/core
 
+## 0.2.3
+
+### Patch Changes
+
+- [#23](https://github.com/burhanharoon/react-ai-form/pull/23) [`2d00791`](https://github.com/burhanharoon/react-ai-form/commit/2d0079121c71c253201593a171aa311dd6329611) Thanks [@burhanharoon](https://github.com/burhanharoon)! - Rewrite the root README as a production-quality landing page (badge row, one-screen Quick Start, API reference, recipes, comparison table, privacy section). Add CONTRIBUTING.md. Docs-only; no code changes.
+
 ## 0.2.2
 
 ### Patch Changes
